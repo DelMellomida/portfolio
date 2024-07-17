@@ -9,7 +9,7 @@ function Home() {
         <React.Fragment>
             <div className="h-screen overflow-hidden">
                 <NavBar />
-                <div className="homeContent mx-5 flex flex-wrap items-center justify-between flex-row">
+                <div className="homeContent mx-5 flex flex-wrap items-end justify-between flex-row h-5/6">
                     <div className="textContent flex flex-wrap items-center justify-between flex-col">
                         <div>
                             <h1 className="text-blue-500 text-8xl text-left font-bold">Jhondel </h1>
@@ -19,7 +19,7 @@ function Home() {
                         </div>
                     </div>
                     <div>
-                        <img src={meImage} alt="me" className="scale-[1.6] mr-10" />
+                        <img src={meImage} alt="me" className="scale-125 mr-10" />
                     </div>
                 </div>
             </div>

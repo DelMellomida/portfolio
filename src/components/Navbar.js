@@ -1,7 +1,7 @@
 function Navbar() {
     return (
         <>
-            <div className="flex items-center justify-between flex-col">
+            <div className="flex items-center justify-between flex-col z-10">
                 <div className='navBar flex items-center justify-between flex-row m-5 w-full'>
                     <div className="logoContainer">
                         <img className="w-14 h-14 ml-8" src="/favicon.ico" alt="logo" />
