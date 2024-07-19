@@ -12,8 +12,8 @@ function Home() {
                 <div className="homeContent mx-5 flex flex-wrap items-end justify-between flex-row h-5/6">
                     <div className="textContent flex flex-wrap items-center justify-between flex-col">
                         <div>
-                            <h1 className="text-blue-500 text-8xl text-left font-bold">Jhondel </h1>
-                            <h1 className="text-blue-500 text-8xl text-left font-bold"> Mellomida</h1>
+                            <h1 className="text-[#5561f5] text-8xl text-left font-bold">Jhondel </h1>
+                            <h1 className="text-[#5561f5] text-8xl text-left font-bold"> Mellomida</h1>
                             <TypingEffect />
                             <Socials />
                         </div>

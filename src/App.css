@@ -1,38 +1,77 @@
 @keyframes fadeIn {
-  0%{
+  0% {
     opacity: 0;
   }
-  100%{
+  100% {
     opacity: 1;
   }
 }
 
 @keyframes moveUp {
-  0%{
+  0% {
     transform: translateY(200%) scale(1);
   }
-  100%{
+  100% {
     transform: translateY(0%) scale(1.25);
   }
 }
 
 @keyframes moveRight {
-  0%{
+  0% {
     transform: translateX(-200%);
   }
-  100%{
+  100% {
     transform: translateX(0%);
   }
 }
 
-.navBar{
+@keyframes zoomIn {
+  0% {
+      transform: scale(0);
+  }
+  100% {
+      transform: scale(1);
+  }
+}
+
+@keyframes blink {
+  0% { opacity: 1; }
+  50% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+.cursor {
+  display: inline-block;
+  width: 1px;
+  height: 1em;
+  background-color: #FFFFFF;
+  margin-left: 3px;
+  animation: blink 1s infinite;
+  transform: translateY(10%);
+}
+
+.animate-zoomIn {
+  animation: zoomIn 1s ease-in-out;
+}
+
+.navBar {
   animation: fadeIn 2s;
 }
 
-.me{
+.me {
   animation: moveUp 4s;
 }
 
-.textContent{
+.textContent {
   animation: moveRight 4s;
+}
+
+.terminal {
+  transition: max-height 0.8s ease;
+  max-height: 200px;
+  overflow: hidden;
+}
+
+.terminal-expanded {
+  max-height: 1000px;
 }
