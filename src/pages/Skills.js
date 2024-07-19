@@ -56,7 +56,7 @@ function Skills() {
                                 <li className='bg-green-300 w-4 h-4 ml-4 rounded-full'></li>
                             </ul>
                             <div className='flex-grow flex justify-center'>
-                                <p className='text-gray-400 text-center font-bold'>jhondel-cli</p>
+                                <p className='text-gray-400 text-center pr-14'>jhondel-cli</p>
                             </div>
                         </div>
                         <p className='text-gray-400'>
