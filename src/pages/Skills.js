@@ -4,8 +4,14 @@ import useTypingEffect from '../components/useTypingEffect';
 import SkillItem from '../components/SkillItem';
 import '../App.css';
 
+// Import images
+import ReactLogo from '../components/images/react.png';
+import JavaLogo from '../components/images/java.png'
+import JSLogo from '../components/images/JavaScript.png'
+
 function Skills() {
     const texts = ['  skills dev', '  projects dev', '  achievements dev'];
+    const nextTexts = ['']
     const [currentTextIndex, setCurrentTextIndex] = useState(0);
     const [isTypingFinished, setIsTypingFinished] = useState(false);
     const [isSkillsVisible, setIsSkillsVisible] = useState(false);
@@ -14,16 +20,18 @@ function Skills() {
 
     const skillContents = [
         [
-            { skill: 'Java', ratings: '7' },
-            { skill: 'JavaScript', ratings: '8' },
-            { skill: 'React', ratings: '7' },
+            { skill: 'Java', ratings: '7', img: JavaLogo },
+            { skill: 'JavaScript', ratings: '8', img: JSLogo},
+            { skill: 'React', ratings: '7', img: ReactLogo},
         ],
         [
             { skill: 'HTML', ratings: '9' },
             { skill: 'CSS', ratings: '8' },
             { skill: 'Tailwind CSS', ratings: '7' },
         ],
-        'Check out my recent projects: A portfolio website built with React, a task management app using Next.js, and a weather app with Tailwind CSS. I\'ve also contributed to open-source projects and participated in several programming contests.'
+        [
+            "Something"
+        ]
     ];
 
     const [currentContentIndex, setCurrentContentIndex] = useState(0);
@@ -45,7 +53,7 @@ function Skills() {
         <React.Fragment>
             <div className="h-screen overflow-hidden font-inconsolata">
                 <NavBar />
-                <div className={`w-screen flex flex-wrap items-center justify-center`}>
+                <div className={`w-screen flex flex-wrap items-center justify-center h-[80%]`}>
                     <div className={`terminal bg-[#1d2026] m-5 p-4 w-full md:w-6/12 rounded-lg flex flex-wrap items-start flex-col shadow-lg shadow-gray-900 ${isSkillsVisible ? 'terminal-expanded' : ''}`} 
                     onClick={handleTerminalClick}
                     >
@@ -72,6 +80,7 @@ function Skills() {
                                                     key={index}
                                                     skill={skill.skill}
                                                     ratings={skill.ratings}
+                                                    img={skill.img}
                                                 />
                                             ))
                                             : skillContents[currentContentIndex]}

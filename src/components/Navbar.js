@@ -10,11 +10,11 @@ function Navbar() {
                     </div>
                     <div className="menuBarContainer">
                         <ul className="menuBar flex items-center justify-between flex-row">
-                            <li className="mr-7 text-gray-400 hover:text-amber-200 hover:scale-110"><Link to='/'>home</Link></li>
-                            <li className="mr-7 text-gray-400 hover:text-lime-200 hover:scale-110"><Link to='/about'>about</Link></li>
-                            <li className="mr-7 text-gray-400 hover:text-red-200 hover:scale-110"><Link to='/skills'>skills</Link></li>
-                            <li className="mr-7 text-gray-400 hover:text-violet-200 hover:scale-110"><Link to='/projects'>projects</Link></li>
-                            <li className="mr-20 text-gray-400 hover:text-blue-200 hover:scale-110"><Link to='/contact'>contact</Link></li>
+                            <li className="mr-10 text-gray-400 hover:text-amber-200 hover:scale-110 font-bold"><Link to='/'>home</Link></li>
+                            <li className="mr-10 text-gray-400 hover:text-lime-200 hover:scale-110 font-bold"><Link to='/about'>about</Link></li>
+                            <li className="mr-10 text-gray-400 hover:text-red-200 hover:scale-110 font-bold"><Link to='/skills'>skills</Link></li>
+                            <li className="mr-10 text-gray-400 hover:text-violet-200 hover:scale-110 font-bold"><Link to='/projects'>projects</Link></li>
+                            <li className="mr-14 text-gray-400 hover:text-blue-200 hover:scale-110 font-bold"><Link to='/contact'>contact</Link></li>
                         </ul>
                     </div>
                 </div>
