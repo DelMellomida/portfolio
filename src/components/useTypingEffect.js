@@ -5,7 +5,7 @@ const useTypingEffect = (text, speed = 150, setIsTypingFinished) => {
 
     useEffect(() => {
         let index = 0;
-        setDisplayedText('');
+        setDisplayedText(''); 
         const interval = setInterval(() => {
             setDisplayedText(prev => prev + text.charAt(index));
             index++;

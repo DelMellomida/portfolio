@@ -4,43 +4,31 @@ import useTypingEffect from '../components/useTypingEffect';
 import SkillItem from '../components/SkillItem';
 import '../App.css';
 
-// Import images
 import ReactLogo from '../components/images/react.png';
-import JavaLogo from '../components/images/java.png'
-import JSLogo from '../components/images/JavaScript.png'
+import JavaLogo from '../components/images/java.png';
+import JSLogo from '../components/images/JavaScript.png';
+import HTMLLogo from '../components/images/html.png';
+import CSSLogo from '../components/images/CSS.png'
+import TWLogo from '../components/images/Tailwind.png'
+import PHPLogo from '../components/images/PHP.png'
+import LaravelLogo from '../components/images/Laravel.png'
 
 function Skills() {
-    const texts = ['  skills dev', '  projects dev', '  achievements dev'];
-    const nextTexts = ['']
+    const texts = ['  skills webdev', '  skills frontend', '  skills backend'];
+    // const texts2 = ['1/4 (Click anywhere in the terminal to continue)', '2/4 (Not a designer, damnit)', '3/4 (Still learning, dont judge me)'];
     const [currentTextIndex, setCurrentTextIndex] = useState(0);
     const [isTypingFinished, setIsTypingFinished] = useState(false);
     const [isSkillsVisible, setIsSkillsVisible] = useState(false);
+    const [isText2Visible, setIsText2Visible] = useState(false);
 
     const typedText = useTypingEffect(texts[currentTextIndex], 150, setIsTypingFinished);
-
-    const skillContents = [
-        [
-            { skill: 'Java', ratings: '7', img: JavaLogo },
-            { skill: 'JavaScript', ratings: '8', img: JSLogo},
-            { skill: 'React', ratings: '7', img: ReactLogo},
-        ],
-        [
-            { skill: 'HTML', ratings: '9' },
-            { skill: 'CSS', ratings: '8' },
-            { skill: 'Tailwind CSS', ratings: '7' },
-        ],
-        [
-            "Something"
-        ]
-    ];
-
-    const [currentContentIndex, setCurrentContentIndex] = useState(0);
 
     const handleTerminalClick = () => {
         setCurrentContentIndex((prevIndex) => (prevIndex + 1) % skillContents.length);
         setCurrentTextIndex((prevIndex) => (prevIndex + 1) % texts.length);
         setIsTypingFinished(false);
         setIsSkillsVisible(false);
+        setIsText2Visible(false);
     };
 
     useEffect(() => {
@@ -49,13 +37,38 @@ function Skills() {
         }
     }, [isTypingFinished]);
 
+    useEffect(() => {
+        if (isSkillsVisible) {
+            setIsText2Visible(true);
+        }
+    }, [isSkillsVisible]);
+
+    const skillContents = [
+        [
+            { skill: 'Java', ratings: '8/10', img: JavaLogo },
+            { skill: 'JavaScript', ratings: '7/10', img: JSLogo },
+            { skill: 'React', ratings: '7/10', img: ReactLogo },
+        ],
+        [
+            { skill: 'HTML', ratings: '8/10', img: HTMLLogo },
+            { skill: 'CSS', ratings: '6', img: CSSLogo },
+            { skill: 'Tailwind CSS', ratings: '7/10', img: TWLogo },
+        ],
+        [
+            { skill: 'PHP', ratings: '5/10', img: PHPLogo },
+            { skill: 'Laravel', ratings: '3/10', img: LaravelLogo },
+        ]
+    ];
+
+    const [currentContentIndex, setCurrentContentIndex] = useState(0);
+
     return (
         <React.Fragment>
             <div className="h-screen overflow-hidden font-inconsolata">
                 <NavBar />
                 <div className={`w-screen flex flex-wrap items-center justify-center h-[80%]`}>
-                    <div className={`terminal bg-[#1d2026] m-5 p-4 w-full md:w-6/12 rounded-lg flex flex-wrap items-start flex-col shadow-lg shadow-gray-900 ${isSkillsVisible ? 'terminal-expanded' : ''}`} 
-                    onClick={handleTerminalClick}
+                    <div className={`terminal bg-[#1d2026] m-5 p-4 w-full md:w-6/12 rounded-lg flex flex-wrap items-start flex-col shadow-lg shadow-gray-900 ${isSkillsVisible ? 'terminal-expanded' : ''}`}
+                        onClick={handleTerminalClick}
                     >
                         <div className='flex flex-wrap flex-row justify-between items-center w-full mb-7'>
                             <ul className='flex flex-wrap flex-row'>
@@ -87,6 +100,11 @@ function Skills() {
                                     </div>
                                 </div>
                             </div>
+                        )}
+                        {isText2Visible && (
+                            <p className='text-gray-400'>
+                                {'>>'}<span> Click anywhere in the terminal to continue</span><span className="cursor"></span>
+                            </p>
                         )}
                     </div>
                 </div>
