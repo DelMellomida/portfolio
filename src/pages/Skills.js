@@ -8,14 +8,18 @@ import ReactLogo from '../components/images/react.png';
 import JavaLogo from '../components/images/java.png';
 import JSLogo from '../components/images/JavaScript.png';
 import HTMLLogo from '../components/images/html.png';
-import CSSLogo from '../components/images/CSS.png'
-import TWLogo from '../components/images/Tailwind.png'
-import PHPLogo from '../components/images/PHP.png'
-import LaravelLogo from '../components/images/Laravel.png'
+import CSSLogo from '../components/images/CSS.png';
+import TWLogo from '../components/images/Tailwind.png';
+import PHPLogo from '../components/images/PHP.png';
+import LaravelLogo from '../components/images/Laravel.png';
+import GitLogo from '../components/images/git.png';
+import GWorkLogo from '../components/images/gworkspace.png';
+import OfficeLogo from '../components/images/office.png';
+import CppLogo from '../components/images/cpp.png';
+import PythonLogo from '../components/images/python.png';
 
 function Skills() {
-    const texts = ['  skills webdev', '  skills frontend', '  skills backend'];
-    // const texts2 = ['1/4 (Click anywhere in the terminal to continue)', '2/4 (Not a designer, damnit)', '3/4 (Still learning, dont judge me)'];
+    const texts = ['  skills webdev', '  skills frontend', '  skills backend', '  skills platform', '  skills others'];
     const [currentTextIndex, setCurrentTextIndex] = useState(0);
     const [isTypingFinished, setIsTypingFinished] = useState(false);
     const [isSkillsVisible, setIsSkillsVisible] = useState(false);
@@ -57,6 +61,15 @@ function Skills() {
         [
             { skill: 'PHP', ratings: '5/10', img: PHPLogo },
             { skill: 'Laravel', ratings: '3/10', img: LaravelLogo },
+        ],
+        [
+            { skill: 'Git', ratings: '7/10', img: GitLogo },
+            { skill: 'Google Workspace', ratings: '6/10', img: GWorkLogo },
+            { skill: 'Microsoft Office Suite', ratings: '6/10', img: OfficeLogo }
+        ],
+        [
+            { skill: 'C++', ratings: '7/10', img: CppLogo },
+            { skill: 'Python', ratings: '5/10', img: PythonLogo },
         ]
     ];
 
@@ -66,7 +79,7 @@ function Skills() {
         <React.Fragment>
             <div className="h-screen overflow-hidden font-inconsolata">
                 <NavBar />
-                <div className={`w-screen flex flex-wrap items-center justify-center h-[80%]`}>
+                <div className={`w-screen flex flex-wrap items-center justify-center h-[85%]`}>
                     <div className={`terminal bg-[#1d2026] m-5 p-4 w-full md:w-6/12 rounded-lg flex flex-wrap items-start flex-col shadow-lg shadow-gray-900 ${isSkillsVisible ? 'terminal-expanded' : ''}`}
                         onClick={handleTerminalClick}
                     >
@@ -84,7 +97,7 @@ function Skills() {
                             jhondel@dev:-$<span>{typedText}</span><span className="cursor"></span>
                         </p>
                         {isSkillsVisible && (
-                            <div className='flex flex-wrap items-center justify-center w-full mt-5'>
+                            <div className='flex flex-wrap items-center justify-center w-full my-5'>
                                 <div className='skills flex flex-wrap items-center justify-center flex-row'>
                                     <div className='text-gray-400 flex flex-wrap items-center justify-evenly flex-row'>
                                         {Array.isArray(skillContents[currentContentIndex])
