@@ -77,7 +77,7 @@ function Skills() {
 
     return (
         <React.Fragment>
-            <div className="h-screen overflow-hidden font-inconsolata">
+            <div className="h-screen font-inconsolata">
                 <NavBar />
                 <div className={`w-screen flex flex-wrap items-center justify-center h-[85%]`}>
                     <div className={`terminal bg-[#1d2026] m-5 p-4 w-full md:w-6/12 rounded-lg flex flex-wrap items-start flex-col shadow-lg shadow-gray-900 ${isSkillsVisible ? 'terminal-expanded' : ''}`}
