@@ -12,6 +12,7 @@ import CSSLogo from '../components/images/CSS.png';
 import TWLogo from '../components/images/Tailwind.png';
 import PHPLogo from '../components/images/PHP.png';
 import LaravelLogo from '../components/images/Laravel.png';
+import MySqlLogo from '../components/images/mysql.png';
 import GitLogo from '../components/images/git.png';
 import GWorkLogo from '../components/images/gworkspace.png';
 import OfficeLogo from '../components/images/office.png';
@@ -61,6 +62,7 @@ function Skills() {
         [
             { skill: 'PHP', ratings: '5/10', img: PHPLogo },
             { skill: 'Laravel', ratings: '3/10', img: LaravelLogo },
+            { skill: 'MySQL', ratings: '5/10', img: MySqlLogo }
         ],
         [
             { skill: 'Git', ratings: '7/10', img: GitLogo },
@@ -69,7 +71,7 @@ function Skills() {
         ],
         [
             { skill: 'C++', ratings: '7/10', img: CppLogo },
-            { skill: 'Python', ratings: '5/10', img: PythonLogo },
+            { skill: 'Python', ratings: '5/10', img: PythonLogo }
         ]
     ];
 
