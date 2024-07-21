@@ -10,7 +10,7 @@ function Navbar() {
 
     return (
         <>
-            <div className="fixed top-0 left-0 w-full z-50 text-white flex items-center justify-between flex-col transition-opacity">
+            <div className="fixed top-0 left-0 bg-[#282c34] w-full z-50 text-white flex items-center justify-between flex-col transition-opacity">
                 <div className='flex items-center justify-between flex-row m-5 w-full'>
                     <div className="logoContainer">
                         <img className="w-14 h-14 ml-8" src="/favicon.ico" alt="logo" />
