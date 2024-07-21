@@ -76,3 +76,7 @@
 .terminal-expanded {
   max-height: 1000px;
 }
+
+.aboutContent{
+  animation: fadeIn 4s;
+}
