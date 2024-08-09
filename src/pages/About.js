@@ -7,7 +7,7 @@ function About() {
         <React.Fragment>
             <div className="h-screen overflow-hidden text-gray-400">
                 <NavBar />
-                <div className='aboutContent mx-5 flex flex-col items-start justify-center h-[120%] py-10 md:py-20'>
+                <div className='aboutContent mx-5 flex flex-row items-end justify-center h-[95%] py-10 md:py-20'>
                     <div className='flex flex-wrap items-start justify-between flex-row'>
                         <div className='w-[60%] ml-10'>
                             <h1 className='text-gray-300 text-5xl font-bold mb-6'>About Me</h1>
@@ -21,8 +21,8 @@ function About() {
                                 Beyond the screen, I enjoy singing and cycling, and I have a deep interest in astronomy and physics. The boundless potential of technology motivates me, and I’m excited to work on projects that aim to make a meaningful impact.
                             </p>
                         </div>
-                        <img src={catImage} alt="cat" className="m-0" />
                     </div>
+                    <img src={catImage} alt="cat" className="scale-[140%] m-0" />
                 </div>
             </div>
         </React.Fragment>

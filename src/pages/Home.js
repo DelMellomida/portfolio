@@ -19,7 +19,7 @@ function Home() {
                         </div>
                     </div>
                     <div className="mt-8 md:mt-0">
-                        <img src={meImage} alt="me" className="me scale-100 md:scale-150 mx-auto md:mx-0" />
+                        <img src={meImage} alt="me" className="me scale-100 md:scale-125 mx-auto md:mx-0" />
                     </div>
                 </div>
             </div>
