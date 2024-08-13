@@ -19,7 +19,7 @@ function Contact() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        const mailtoLink = `mailto:your.email@example.com?subject=Message from ${formData.name}&body=${formData.message} (${formData.email})`;
+        const mailtoLink = `mailto:delmellomida@gmail.com?subject=Message from ${formData.name}&body=${formData.message} (${formData.email})`;
         window.location.href = mailtoLink;
     };
 
