@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import NavBar from "../components/Navbar";
 import Socials from "../components/Socials";
-import CustomInput from "../components/CustomInput"; // Import your custom input
+import CustomInput from "../components/CustomInput";
 
 function Contact() {
     const [formData, setFormData] = useState({
@@ -29,14 +29,14 @@ function Contact() {
         <React.Fragment>
             <div className="h-screen overflow-auto flex flex-col justify-center items-center">
                 <NavBar />
-                <div className='mt-24 flex flex-wrap items-center justify-center flex-row bg-[#262626] w-[70%] h-fit rounded-2xl p-1'>
+                <div className='contactContent mt-24 relative flex flex-wrap items-center justify-end flex-row bg-[#262626] w-[70%] h-fit rounded-2xl p-1 overflow-hidden'>
                     <div
-                        className='contact-image bg-cover bg-center w-full md:w-1/2 h-full rounded-2xl'
+                        className='contact-image absolute inset-0 bg-cover bg-center w-[50%] h-full rounded-2xl z-50'
                         style={{ backgroundImage: `url(/contact-bg.webp)` }}
                         alt="contact"
                     >
                     </div>
-                    <div className='contact-content w-full md:w-1/2 p-6'>
+                    <div className='contact-content relative w-full md:w-1/2 p-6 z-20'>
                         <div className="text-center">
                             <h1 className="text-4xl font-bold text-slate-200 mb-4">Let's Get in Touch</h1>
                             <p className="text-gray-600 mb-8">

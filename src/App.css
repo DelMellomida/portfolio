@@ -40,6 +40,15 @@
   100% { opacity: 1; }
 }
 
+@keyframes imageShrink{
+  0%{
+    width: 100%;
+  }
+  100%{
+    width:50%;
+  }
+}
+
 .cursor {
   display: inline-block;
   width: 1px;
@@ -77,6 +86,10 @@
   max-height: 1000px;
 }
 
-.aboutContent{
+.aboutContent, .contactContent{
   animation: fadeIn 4s;
+}
+
+.contact-image{
+  animation: imageShrink 2s;
 }
