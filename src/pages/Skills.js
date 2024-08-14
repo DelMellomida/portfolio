@@ -56,18 +56,18 @@ function Skills() {
         ],
         [
             { skill: 'HTML', ratings: '8/10', img: HTMLLogo },
-            { skill: 'CSS', ratings: '6', img: CSSLogo },
+            { skill: 'CSS', ratings: '6/10', img: CSSLogo },
             { skill: 'Tailwind CSS', ratings: '7/10', img: TWLogo },
         ],
         [
             { skill: 'PHP', ratings: '5/10', img: PHPLogo },
-            { skill: 'Laravel', ratings: '3/10', img: LaravelLogo },
+            { skill: 'Laravel', ratings: '5/10', img: LaravelLogo },
             { skill: 'MySQL', ratings: '5/10', img: MySqlLogo }
         ],
         [
             { skill: 'Git', ratings: '7/10', img: GitLogo },
-            { skill: 'Google Workspace', ratings: '6/10', img: GWorkLogo },
-            { skill: 'Microsoft Office Suite', ratings: '6/10', img: OfficeLogo }
+            { skill: 'Google Workspace', ratings: '8/10', img: GWorkLogo },
+            { skill: 'Microsoft Office Suite', ratings: '8/10', img: OfficeLogo }
         ],
         [
             { skill: 'C++', ratings: '7/10', img: CppLogo },
