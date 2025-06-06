@@ -15,7 +15,7 @@ function Navbar() {
             <div className="navBar fixed top-0 left-0 bg-[#282c34] w-full z-50 text-white block items-center justify-between flex-col transition-opacity">
                 <div className='flex items-center justify-between flex-row m-5 w-full'>
                     <div className="logoContainer">
-                        <img className="w-14 h-14 ml-8" src={logo} alt="logo" />
+                        <Link to="/"><img className="w-14 h-14 ml-8" src={logo} alt="logo" /></Link>
                     </div>
                     <div className="menuBarContainer hidden md:flex">
                         <ul className="menuBar flex items-center justify-between flex-row">
