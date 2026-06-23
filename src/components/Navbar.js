@@ -22,6 +22,7 @@ function Navbar() {
                             <li className="mr-14 text-gray-400 hover:text-amber-200 hover:scale-110 font-bold"><Link to='/'>home</Link></li>
                             <li className="mr-14 text-gray-400 hover:text-lime-200 hover:scale-110 font-bold"><Link to='/about'>about</Link></li>
                             <li className="mr-14 text-gray-400 hover:text-red-200 hover:scale-110 font-bold"><Link to='/skills'>skills</Link></li>
+                            <li className="mr-14 text-gray-400 hover:text-cyan-200 hover:scale-110 font-bold"><Link to='/experience'>experience</Link></li>
                             <li className="mr-14 text-gray-400 hover:text-violet-200 hover:scale-110 font-bold"><Link to='/projects'>projects</Link></li>
                             <li className="mr-14 text-gray-400 hover:text-blue-200 hover:scale-110 font-bold"><Link to='/contact'>contact</Link></li>
                         </ul>
@@ -46,6 +47,7 @@ function Navbar() {
                             <li className="text-gray-400 hover:text-amber-200 font-bold"><Link to='/' onClick={toggleMenu}>home</Link></li>
                             <li className="text-gray-400 hover:text-lime-200 font-bold"><Link to='/about' onClick={toggleMenu}>about</Link></li>
                             <li className="text-gray-400 hover:text-red-200 font-bold"><Link to='/skills' onClick={toggleMenu}>skills</Link></li>
+                            <li className="text-gray-400 hover:text-cyan-200 font-bold"><Link to='/experience' onClick={toggleMenu}>experience</Link></li>
                             <li className="text-gray-400 hover:text-violet-200 font-bold"><Link to='/projects' onClick={toggleMenu}>projects</Link></li>
                             <li className="text-gray-400 hover:text-blue-200 font-bold"><Link to='/contact' onClick={toggleMenu}>contact</Link></li>
                         </ul>

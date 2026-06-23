@@ -2,7 +2,11 @@
 module.exports = {
   content: ["./src/**/*.{html,js}"],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        inconsolata: ['Inconsolata', 'monospace'],
+      },
+    },
     screens:{
       'md':'900px',
     },

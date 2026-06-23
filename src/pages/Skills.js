@@ -5,22 +5,15 @@ import SkillItem from '../components/SkillItem';
 import '../App.css';
 
 import ReactLogo from '../components/images/react.png';
-import JavaLogo from '../components/images/java.png';
 import JSLogo from '../components/images/JavaScript.png';
-import HTMLLogo from '../components/images/html.png';
-import CSSLogo from '../components/images/CSS.png';
 import TWLogo from '../components/images/Tailwind.png';
 import PHPLogo from '../components/images/PHP.png';
-import LaravelLogo from '../components/images/Laravel.png';
 import MySqlLogo from '../components/images/mysql.png';
 import GitLogo from '../components/images/git.png';
-import GWorkLogo from '../components/images/gworkspace.png';
-import OfficeLogo from '../components/images/office.png';
-import CppLogo from '../components/images/cpp.png';
 import PythonLogo from '../components/images/python.png';
 
 function Skills() {
-    const texts = ['  skills webdev', '  skills frontend', '  skills backend', '  skills platform', '  skills others'];
+    const texts = ['  skills languages', '  skills cloud', '  skills databases', '  skills ai', '  skills other'];
     const [currentTextIndex, setCurrentTextIndex] = useState(0);
     const [isTypingFinished, setIsTypingFinished] = useState(false);
     const [isSkillsVisible, setIsSkillsVisible] = useState(false);
@@ -50,38 +43,56 @@ function Skills() {
 
     const skillContents = [
         [
-            { skill: 'Java', ratings: '8/10', img: JavaLogo },
-            { skill: 'JavaScript', ratings: '7/10', img: JSLogo },
-            { skill: 'React', ratings: '7/10', img: ReactLogo },
+            { skill: 'Python', ratings: 'Experienced', img: PythonLogo },
+            { skill: 'FastAPI', ratings: 'Experienced', img: PythonLogo },
+            { skill: 'Node.js', ratings: 'Experienced', img: JSLogo },
+            { skill: 'React', ratings: 'Experienced', img: ReactLogo },
+            { skill: 'Next.js', ratings: 'Proficient', img: ReactLogo },
+            { skill: 'TypeScript', ratings: 'Proficient', img: JSLogo },
+            { skill: 'PHP / Laravel', ratings: 'Proficient', img: PHPLogo },
+            { skill: 'Tailwind CSS', ratings: 'Experienced', img: TWLogo },
         ],
         [
-            { skill: 'HTML', ratings: '8/10', img: HTMLLogo },
-            { skill: 'CSS', ratings: '6/10', img: CSSLogo },
-            { skill: 'Tailwind CSS', ratings: '7/10', img: TWLogo },
+            { skill: 'AWS', ratings: 'Proficient' },
+            { skill: 'GCP', ratings: 'Proficient' },
+            { skill: 'Azure', ratings: 'Familiar' },
+            { skill: 'Docker', ratings: 'Proficient' },
+            { skill: 'OpenTelemetry', ratings: 'Experienced' },
+            { skill: 'Grafana Cloud', ratings: 'Experienced' },
+            { skill: 'CI/CD', ratings: 'Proficient' },
         ],
         [
-            { skill: 'PHP', ratings: '5/10', img: PHPLogo },
-            { skill: 'Laravel', ratings: '5/10', img: LaravelLogo },
-            { skill: 'MySQL', ratings: '5/10', img: MySqlLogo }
+            { skill: 'MongoDB', ratings: 'Experienced' },
+            { skill: 'PostgreSQL', ratings: 'Proficient' },
+            { skill: 'MySQL', ratings: 'Proficient', img: MySqlLogo },
+            { skill: 'Supabase', ratings: 'Proficient' },
+            { skill: 'ChromaDB', ratings: 'Experienced' },
         ],
         [
-            { skill: 'Git', ratings: '7/10', img: GitLogo },
-            { skill: 'Google Workspace', ratings: '8/10', img: GWorkLogo },
-            { skill: 'Microsoft Office Suite', ratings: '8/10', img: OfficeLogo }
+            { skill: 'OpenAI API', ratings: 'Experienced', img: PythonLogo },
+            { skill: 'Anthropic API', ratings: 'Experienced' },
+            { skill: 'Gemini API', ratings: 'Experienced' },
+            { skill: 'LangChain', ratings: 'Proficient' },
+            { skill: 'LangGraph', ratings: 'Proficient' },
+            { skill: 'RAG / MCP', ratings: 'Experienced' },
+            { skill: 'Agent Orchestration', ratings: 'Experienced' },
         ],
         [
-            { skill: 'C++', ratings: '7/10', img: CppLogo },
-            { skill: 'Python', ratings: '5/10', img: PythonLogo }
-        ]
+            { skill: 'REST API Design', ratings: 'Experienced' },
+            { skill: 'System Design', ratings: 'Proficient' },
+            { skill: 'Active Directory', ratings: 'Proficient' },
+            { skill: 'System Administration', ratings: 'Proficient' },
+            { skill: 'Git', ratings: 'Experienced', img: GitLogo },
+        ],
     ];
 
     const [currentContentIndex, setCurrentContentIndex] = useState(0);
 
     return (
         <React.Fragment>
-            <div className="h-screen font-inconsolata">
+            <div className="min-h-screen font-inconsolata bg-gradient-to-br from-gray-950 via-gray-900 to-gray-800">
                 <NavBar />
-                <div className={`w-screen flex flex-wrap items-center justify-center h-[150%] md:h-[100%]`}>
+                <div className={`w-screen flex flex-wrap items-center justify-center py-28 md:py-20 min-h-screen`}>
                     <div className={`terminal bg-[#1d2026] m-5 p-4 w-full md:w-6/12 rounded-lg flex flex-wrap items-start flex-col shadow-lg shadow-gray-900 ${isSkillsVisible ? 'terminal-expanded' : ''}`}
                         onClick={handleTerminalClick}
                     >
@@ -102,16 +113,14 @@ function Skills() {
                             <div className='flex flex-wrap items-center justify-center w-full my-5'>
                                 <div className='skills flex flex-wrap items-center justify-center flex-row'>
                                     <div className='text-gray-400 flex flex-wrap items-center justify-evenly flex-row'>
-                                        {Array.isArray(skillContents[currentContentIndex])
-                                            ? skillContents[currentContentIndex].map((skill, index) => (
-                                                <SkillItem
-                                                    key={index}
-                                                    skill={skill.skill}
-                                                    ratings={skill.ratings}
-                                                    img={skill.img}
-                                                />
-                                            ))
-                                            : skillContents[currentContentIndex]}
+                                        {skillContents[currentContentIndex].map((skill, index) => (
+                                            <SkillItem
+                                                key={index}
+                                                skill={skill.skill}
+                                                ratings={skill.ratings}
+                                                img={skill.img}
+                                            />
+                                        ))}
                                     </div>
                                 </div>
                             </div>

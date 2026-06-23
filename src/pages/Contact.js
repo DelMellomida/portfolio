@@ -37,7 +37,7 @@ function Contact() {
                         <div className="text-center">
                             <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-slate-200 mb-4">Let's Get in Touch</h1>
                             <p className="text-gray-400 text-sm sm:text-base mb-6 sm:mb-8">
-                                I'm always open to discussing new projects, creative ideas, or opportunities to be part of your visions.
+                                I'm always open to discussing new projects, engineering roles, or opportunities to build impactful software.
                             </p>
                         </div>
 

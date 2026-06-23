@@ -6,7 +6,7 @@ const TypingEffect = () => {
 
   useEffect(() => {
     const options = {
-      strings: ["PROGRAMMER", "DEVELOPER", "DESIGNER", "CYCLIST", "CAT-LOVER"],
+      strings: ["SOFTWARE ENGINEER", "AI BUILDER", "FULL-STACK DEV", "PROBLEM SOLVER", "CAT-LOVER"],
       typeSpeed: 150,
       backSpeed: 150,
       loop: true,

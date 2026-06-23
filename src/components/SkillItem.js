@@ -13,7 +13,9 @@ function SkillItem(props) {
                     </div>
                 )}
                 <h3 className='font-bold text-white mt-2'>{props.skill}</h3>
-                <p className='text-gray-400'>Rating: {props.ratings}</p>
+                {props.ratings && (
+                    <p className='text-gray-400 text-sm mt-1'>{props.ratings}</p>
+                )}
             </div>
         </React.Fragment>
     );
