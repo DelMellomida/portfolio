@@ -21,7 +21,7 @@ const TypingEffect = () => {
 
   return (
     <div>
-      <h2 className="roles text-gray-400 text-4xl font-bold mt-2">//<span ref={el}></span></h2>
+      <h2 className="roles text-gray-400 text-4xl font-bold mt-2">{'//'}<span ref={el}></span></h2>
     </div>
   );
 };
