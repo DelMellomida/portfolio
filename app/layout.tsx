@@ -3,7 +3,6 @@ import { Geist, JetBrains_Mono } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { site, siteUrl } from "@/lib/site";
-import { ThemeProvider } from "@/components/layout/theme-provider";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -78,12 +77,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en" suppressHydrationWarning>
       <body className={`${geistSans.variable} ${jetbrainsMono.variable} antialiased`}>
         {/*
-          Chrome lives in the (site) and admin layouts, not here — the admin
-          area needs its own header and a wider container than the site.
+          Chrome and the theme provider live in the (site) and admin layouts,
+          not here. The admin needs its own header, and its ThemeProvider needs
+          a CSP nonce read from request headers — doing that here would make
+          the root layout dynamic and drag every static page down with it.
         */}
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
-          {children}
-        </ThemeProvider>
+        {children}
         <Analytics />
         <SpeedInsights />
       </body>
