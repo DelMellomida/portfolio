@@ -4,8 +4,10 @@ import { notFound } from "next/navigation";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import { getAllProjects, getProject } from "@/lib/content";
 import { mdxComponents, mdxOptions } from "@/lib/mdx";
+import { Suspense } from "react";
 import { ArrowLink, Tag } from "@/components/ui/primitives";
 import { ExternalLinkIcon, GitHubIcon } from "@/components/ui/icons";
+import { RepoStats } from "@/components/github/repo-stats";
 
 type Params = Promise<{ slug: string }>;
 
@@ -87,6 +89,12 @@ export default async function ProjectPage({ params }: { params: Params }) {
               </a>
             )}
           </div>
+        )}
+        {/* Live stars, forks, language, and last-push time. */}
+        {project.links?.repo && (
+          <Suspense fallback={null}>
+            <RepoStats repoUrl={project.links.repo} />
+          </Suspense>
         )}
       </header>
 

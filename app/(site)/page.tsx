@@ -1,9 +1,11 @@
 import Image from "next/image";
 import Link from "next/link";
+import { Suspense } from "react";
+import { ActivityFeed } from "@/components/github/activity-feed";
 import { site, primarySocials, siteUrl } from "@/lib/site";
 import { heroRoles, shortBio } from "@/data/profile";
 import { experience } from "@/data/experience";
-import { skillCategories } from "@/data/skills";
+import { getSkillCategories } from "@/lib/skills-server";
 import { getFeaturedProjects, getAllPosts } from "@/lib/content";
 import { TypingRoles } from "@/components/home/typing-roles";
 import { ProjectCard } from "@/components/work/project-card";
@@ -15,6 +17,7 @@ import { formatDateShort } from "@/lib/utils";
 export default function HomePage() {
   const projects = getFeaturedProjects();
   const posts = getAllPosts().slice(0, 3);
+  const skillCategories = getSkillCategories();
 
   const personJsonLd = {
     "@context": "https://schema.org",
@@ -179,6 +182,14 @@ export default function HomePage() {
           </ul>
         </Section>
       )}
+
+      {/*
+        Live GitHub activity. Suspended so a slow or rate-limited GitHub
+        response streams in late instead of holding up the whole page.
+      */}
+      <Suspense fallback={null}>
+        <ActivityFeed />
+      </Suspense>
 
       {/* CTA */}
       <Section>
