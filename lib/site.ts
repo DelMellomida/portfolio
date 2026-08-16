@@ -18,6 +18,8 @@ export const site = {
   url: siteUrl,
   email: "delmellomida@gmail.com",
   location: "Metro Manila, Philippines",
+  /** Drives the live GitHub activity widgets. */
+  githubUsername: "DelMellomida",
   /** Drives the availability indicator in the nav and the contact page. */
   availability: {
     open: true,

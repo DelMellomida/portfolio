@@ -1,5 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
+import { Suspense } from "react";
+import { ActivityFeed } from "@/components/github/activity-feed";
 import { site, primarySocials, siteUrl } from "@/lib/site";
 import { heroRoles, shortBio } from "@/data/profile";
 import { experience } from "@/data/experience";
@@ -179,6 +181,14 @@ export default function HomePage() {
           </ul>
         </Section>
       )}
+
+      {/*
+        Live GitHub activity. Suspended so a slow or rate-limited GitHub
+        response streams in late instead of holding up the whole page.
+      */}
+      <Suspense fallback={null}>
+        <ActivityFeed />
+      </Suspense>
 
       {/* CTA */}
       <Section>
