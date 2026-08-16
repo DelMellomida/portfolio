@@ -32,24 +32,32 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   const nonce = (await headers()).get("x-nonce") ?? undefined;
 
   return (
-    <div className="flex min-h-screen flex-col">
-      <header className="border-border bg-bg/80 sticky top-0 z-40 border-b backdrop-blur-md">
-        <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-5 sm:px-6">
-          <div className="flex items-center gap-4">
-            <Link href="/admin" className="shrink-0 font-mono text-sm font-medium">
-              <span className="text-accent">~/</span>admin
-            </Link>
-            <AdminTabs />
-          </div>
-          <div className="flex shrink-0 items-center gap-1">
-            <Link
-              href="/"
-              className="text-faint hover:text-muted hidden px-2 text-xs transition-colors sm:block"
-            >
-              view site ↗
-            </Link>
-            <ThemeToggle />
-            <LogoutButton />
+    <ThemeProvider
+      attribute="class"
+      defaultTheme="system"
+      enableSystem
+      disableTransitionOnChange
+      nonce={nonce}
+    >
+      <div className="flex min-h-screen flex-col">
+        <header className="border-border bg-bg/80 sticky top-0 z-40 border-b backdrop-blur-md">
+          <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-5 sm:px-6">
+            <div className="flex items-center gap-4">
+              <Link href="/admin" className="shrink-0 font-mono text-sm font-medium">
+                <span className="text-accent">~/</span>admin
+              </Link>
+              <AdminTabs />
+            </div>
+            <div className="flex shrink-0 items-center gap-1">
+              <Link
+                href="/"
+                className="text-faint hover:text-muted hidden px-2 text-xs transition-colors sm:block"
+              >
+                view site ↗
+              </Link>
+              <ThemeToggle />
+              <LogoutButton />
+            </div>
           </div>
         </header>
 
