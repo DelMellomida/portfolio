@@ -1,0 +1,57 @@
+---
+title: "Observability across three languages without three implementations"
+description: "Instrumenting Python, .NET, and React services with one shared standard — what OpenTelemetry gets right, and where the per-language edges still show."
+date: "2026-01-20"
+tags: ["OpenTelemetry", "Observability", "Architecture"]
+draft: true
+---
+
+Most observability setups start the same way: one team adds logging to one service, another team picks a different library, and six months later you have four services that each describe a request differently. Correlating a single user action across them becomes archaeology.
+
+The problem I was handed was to avoid that outcome across Python, .NET, and React services simultaneously.
+
+## Why "just pick a library" doesn't work
+
+The obvious approach is to standardize on a vendor SDK. It fails for a specific reason: the SDK shapes your instrumentation code, so switching vendors later means touching every service. You have traded a correlation problem for a lock-in problem.
+
+The second failure mode is subtler. Each language ecosystem has its own idiomatic logging library, and if you let each service use its own, the *fields* diverge even when the transport doesn't. One service emits `user_id`, another `userId`, a third nests it under `context.user.id`. Your traces technically arrive; they just don't join.
+
+## What OpenTelemetry actually buys you
+
+OTel separates three things that vendor SDKs tend to fuse:
+
+1. **Instrumentation** — the code in your service that produces spans.
+2. **Collection** — the OTel Collector, a separate process that receives, processes, and forwards telemetry.
+3. **Backend** — where it lands. In our case, Grafana Cloud.
+
+The important consequence is that **the Collector is a seam**. Changing backends is a Collector config change, not a code change across every service. Adding sampling, redaction, or attribute normalization happens in one place rather than in three languages.
+
+## The shape of the setup
+
+```
+Python (FastAPI) ─┐
+.NET services    ─┼─► OTel Collector ─► Grafana Cloud
+React frontend   ─┘
+```
+
+Each service exports OTLP to the Collector. The Collector handles batching, retries, and attribute processing, then forwards to the backend.
+
+Standardizing on a shared semantic convention for attribute names is the part that actually makes correlation work. OTel publishes semantic conventions for exactly this reason — use them rather than inventing your own field names, and cross-service queries work without a translation layer.
+
+## Where the per-language edges show
+
+OTel is genuinely consistent across languages, but not uniformly mature across them:
+
+- **Python** auto-instrumentation for FastAPI is good. You get request spans essentially for free.
+- **.NET** has strong first-party support, since `System.Diagnostics.Activity` maps onto OTel's model directly.
+- **Browser** is the awkward one. Frontend tracing has to deal with users closing tabs mid-request, unreliable network conditions, and the fact that you're shipping the instrumentation over the wire to every visitor. Be selective — instrumenting every interaction in the browser is a bundle-size decision as much as an observability one.
+
+## The rule that mattered most
+
+**Instrument boundaries, not internals.** The temptation with a new tracing setup is to span everything, which produces traces so noisy nobody reads them and a bill nobody wants to explain.
+
+Spans at service boundaries — incoming requests, outgoing calls, database queries, queue operations — answer the question you actually ask during an incident: *where did the time go, and which hop failed?* Internal function-level spans are worth adding later, in the one place you have a specific question about, not preemptively everywhere.
+
+---
+
+> This post is a draft. Review it before publishing — the technical content reflects the architecture, but you may want to add specifics from your own deployment.

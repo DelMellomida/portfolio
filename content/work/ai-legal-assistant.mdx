@@ -1,0 +1,51 @@
+---
+title: AI Legal Assistant
+role: Full-Stack Developer
+period: "2025"
+summary: A contract analysis and summarization platform that extracts obligations, dates, and risk clauses from legal documents using an NLP pipeline layered under LLM summarization.
+tech:
+  - FastAPI
+  - Next.js
+  - GPT-4
+  - Claude
+  - spaCy
+  - NLTK
+  - Supabase
+  - MongoDB
+featured: true
+order: 3
+image: /images/work/ai-legal-assistant.png
+---
+
+## The problem
+
+Contract review is slow because the important parts are buried. The obligations, renewal dates, termination conditions, and liability caps that actually matter are spread across dozens of pages of boilerplate, and finding them is manual work that does not scale.
+
+Handing a whole contract to an LLM and asking for a summary is the obvious first attempt, and it fails in a specific way: the model produces something fluent and plausible, and you have no way to tell which parts are grounded in the document and which are not. For legal text, a confident wrong answer is worse than no answer.
+
+## Approach
+
+I used a **two-stage pipeline** rather than a single LLM call, specifically so extraction stayed traceable.
+
+1. **Deterministic NLP first.** spaCy and NLTK handle segmentation, named entity recognition, and date extraction. This stage is boring and auditable — every entity it finds points at a span in the source document.
+2. **LLM summarization second**, over the structured output of stage one rather than over raw text. The model explains and summarizes what was extracted instead of being trusted to find it.
+
+That ordering matters. It keeps the parts of the problem that have a correct answer — *where is the termination date* — in deterministic code, and reserves the model for the part that genuinely benefits from language understanding.
+
+## Architecture
+
+- **FastAPI backend** exposing document upload, the processing pipeline, and query endpoints.
+- **Next.js frontend** for upload, review, and the summary view.
+- **Split persistence** — Supabase (Postgres) for relational data and auth, MongoDB for the document payloads and extracted entity trees, which are deeply nested and change shape by contract type.
+- **JWT authentication**, since documents are tenant-scoped and a leak here is not a small problem.
+- **Model routing** between GPT-4 and Claude, so a provider outage degrades the feature instead of taking it down.
+
+## Outcome
+
+The pipeline turned a full manual read into a review of pre-extracted, source-linked clauses.
+
+> **TODO — add your numbers.** Documents processed, extraction accuracy on your test set, or review time before vs. after. Even a rough figure from your own testing beats an unquantified claim.
+
+## What I'd do differently
+
+The two databases were justified, but I reached for them earlier than I needed to. Postgres with a `jsonb` column would have carried the document payloads perfectly well until there was real scale pressure, and would have saved maintaining two connection paths, two backup stories, and two sets of migrations for a project at this stage.

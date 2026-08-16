@@ -1,0 +1,50 @@
+---
+title: Real-Time Chat with AI Smart Replies
+role: Full-Stack Developer
+period: "2025"
+summary: A MERN real-time messaging platform with AI-generated smart replies, built alongside a thesis on hybrid credit scoring combining logistic regression with a rule-based system.
+tech:
+  - MongoDB
+  - Express
+  - React
+  - Node.js
+  - Socket.IO
+  - OpenRouter
+featured: true
+order: 4
+image: /images/work/chat-app.png
+links:
+  repo: https://github.com/DelMellomida
+---
+
+## The problem
+
+Two problems, one project.
+
+The **chat platform** needed real-time delivery with AI-assisted replies that were actually useful. Smart replies fail when they are generic — "Sounds good!" on every message is noise. To be worth the screen space they need enough conversational context to be specific.
+
+The **thesis** asked a different question: can a credit scoring model be both accurate and explainable? Pure ML models score well and cannot tell an applicant why they were declined. Pure rule-based systems explain everything and miss non-obvious signal.
+
+## Approach
+
+**Chat.** Socket.IO for the transport, with AI replies generated through OpenRouter over a sliding window of recent messages rather than the last message alone. The window is what makes the suggestions specific instead of generic. Generation is asynchronous — suggestions arrive after the message renders, so the AI call never sits in the delivery path.
+
+**Credit scoring.** A hybrid: logistic regression for the statistical signal, a rule-based layer for hard policy constraints. The rules act as a guardrail the model cannot override, and because logistic regression coefficients are directly interpretable, every decision has a reason attached. That combination gets most of the accuracy while keeping the decision explainable — which for credit is a requirement, not a nice-to-have.
+
+## Architecture
+
+- **Socket.IO** over an Express server for bidirectional messaging with room-based routing.
+- **MongoDB** for message history and user state.
+- **React** frontend with optimistic message rendering so the UI never waits on the round trip.
+- **OpenRouter** as the model gateway, which made trying different models a config change rather than an integration.
+- **Credit scoring service** exposing the hybrid model behind a scoring endpoint with a working demo.
+
+## Outcome
+
+Both pieces shipped with working demos — the chat platform end to end, and the scoring system as a demonstrable model rather than a paper result.
+
+> **TODO — add your numbers.** Thesis model accuracy, AUC, or the confusion matrix on your holdout set would land well here, as would smart-reply acceptance rate if you measured it.
+
+## What I'd do differently
+
+Smart replies were generated for every incoming message, which meant paying for generations on messages the user answered instantly without looking at the suggestions. Generating lazily — on focus of the reply box rather than on message receipt — would have cut the call volume substantially with no visible difference to the user.

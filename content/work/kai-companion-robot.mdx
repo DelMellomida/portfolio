@@ -1,0 +1,65 @@
+---
+title: "Kai — an offline companion robot"
+role: AI / Robotics Engineer · DEVCON Philippines
+period: "2026"
+summary: A face-tracking, talking companion robot on a Jetson Orin Nano. Wake word, speech recognition, retrieval over its own documents, and speech synthesis — all running on-device, with no cloud and no API keys anywhere on the conversation path.
+tech:
+  - Python
+  - Jetson Orin Nano
+  - MediaPipe
+  - faster-whisper
+  - Ollama
+  - Piper TTS
+  - Flask
+  - Arduino
+featured: true
+order: 1
+links:
+  repo: https://github.com/DelMellomida/kai
+---
+
+## The problem
+
+A companion robot that talks to people at events has two constraints that pull against each other.
+
+It has to feel responsive — a pause longer than about a second reads as broken, not thoughtful. And it has to work at a venue, where the Wi-Fi is contested, captive-portalled, or simply absent. Any design that puts a cloud API on the conversation path fails the second constraint exactly when it matters most.
+
+So the whole pipeline — wake word, speech-to-text, retrieval, generation, and speech synthesis — runs on the device. An 8 GB Jetson Orin Nano, with CPU and GPU sharing that memory.
+
+## Approach
+
+The interesting part of this project isn't any single model. It's the budget.
+
+Every component competes for the same 8 GB, so each choice is a tradeoff against every other choice. `faster-whisper` runs as `base`, int8, on CPU — deliberately leaving GPU headroom for the LLM. Generation is `gemma2:2b` through Ollama, small enough to coexist with everything else rather than the largest model that fits alone. Vision runs MediaPipe FaceMesh at 320×240, decimated to 15 fps.
+
+None of those are the best-in-isolation choice. They're the choices that let all five subsystems be resident simultaneously, which is the only configuration that actually works.
+
+That reasoning is written down in `docs/memory-budget.md` rather than living in my head, because it's the document you need *before* changing a model — and the constraint that isn't recorded is the one someone breaks six months later.
+
+## Architecture
+
+**Motion is decoupled from inference.** A PD controller runs the head on its own thread at 15 Hz, slew-clamped, so the head glides continuously instead of stepping between inference ticks. Tying servo updates to the vision loop makes the robot move in visible jerks; separating them is what makes it look alive.
+
+**An Arduino sits between the Jetson and the servos**, purely as a voltage bridge. The Jetson's GPIO tops out at 3.3 V and SG90 servos don't reliably read that. The Arduino receives `"pan,tilt\n"` over USB serial and writes the angle — no logic, just level shifting. Decisions like this are recorded in `docs/faq.md`, because "why not just use the Jetson's PWM pins" is a question that gets asked every time someone new reads the wiring diagram.
+
+**Audio is one always-open 16 kHz capture stream** feeding a tiered wake word and VAD-based turn-taking, rather than opening and closing a device per interaction. The jaw servo syncs to the real measured audio length, not an estimate, so the mime matches the speech.
+
+**Degradation is the design, not the error path.** No camera, no servo, no microphone, no Flask, no wake-word engine — each is a *state the robot reports and continues through*, not a startup crash. A demo robot that refuses to boot because a USB mic was unplugged is worse than one that boots deaf and says so.
+
+## Testing hardware without hardware
+
+**1,173 tests, about 33 seconds, no hardware, no network, and no models required.**
+
+The audio, vision, and serial layers are all driven through fakes with injected clocks. That's the decision I'd defend hardest on this project: robotics code that can only be tested on the robot gets tested rarely, and the feedback loop is measured in minutes of physical setup. Pushing the hardware behind seams meant the control logic, the conversation state machine, and the recovery ladder are all verifiable on a laptop in half a minute.
+
+## What's genuinely wrong with it
+
+The dashboard binds `0.0.0.0` on port 8081 with **no authentication at all**. Anyone on the network can reach every control — servo angles, settings, the transcript.
+
+On a home LAN that's a reasonable trade for zero-friction operation. At a public venue it's a real exposure, and I'd rather write that down than pretend otherwise. It's tracked as a ticket rather than quietly left in the code, along with the rest of the known gaps — measured, not guessed.
+
+Kai is an R&D build that runs live at events. It is not a product.
+
+## What I'd do differently
+
+The config started as constants scattered across the modules that used them, which meant tuning the robot involved editing five files and remembering which values needed a restart. Splitting it into `config/` — one file per subsystem, each constant annotated with the measurement behind it — should have happened at the start rather than after the second event where I tuned the wrong knob.
