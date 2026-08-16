@@ -176,6 +176,8 @@
     color: var(--text-muted);
     font-size: 1rem;
     line-height: 1.75;
+    /* Long URLs and identifiers must not push the page sideways on mobile. */
+    overflow-wrap: break-word;
   }
 
   .prose > * + * {
@@ -292,8 +294,15 @@
     margin: 2.5em 0;
   }
 
+  /*
+   * `display: block` lets a wide table scroll inside itself instead of
+   * widening the page. Without it, any table with more than ~3 columns
+   * forces horizontal scroll on the whole document on mobile.
+   */
   .prose table {
-    width: 100%;
+    display: block;
+    max-width: 100%;
+    overflow-x: auto;
     font-size: 0.9rem;
     border-collapse: collapse;
   }

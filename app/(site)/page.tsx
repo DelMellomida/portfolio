@@ -29,7 +29,10 @@ export default function HomePage() {
       "@type": "CollegeOrUniversity",
       name: "Pamantasan ng Lungsod ng Pasig",
     },
-    worksFor: { "@type": "Organization", name: "Ellinov Technologies" },
+    worksFor: [
+      { "@type": "Organization", name: "Ellinov Technologies" },
+      { "@type": "Organization", name: "DEVCON Philippines" },
+    ],
     knowsAbout: skillCategories.flatMap((c) => c.skills.map((s) => s.name)),
     sameAs: primarySocials.filter((s) => s.key !== "email").map((s) => s.href),
   };
@@ -96,7 +99,7 @@ export default function HomePage() {
 
         <div className="shrink-0">
           <Image
-            src="/images/me.png"
+            src="/images/me.jpg"
             alt={`Portrait of ${site.name}`}
             width={280}
             height={280}

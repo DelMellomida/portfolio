@@ -23,7 +23,7 @@ export function Footer() {
             )}
           </div>
 
-          <nav aria-label="Footer" className="flex gap-12">
+          <nav aria-label="Footer" className="flex flex-wrap gap-x-12 gap-y-8 sm:gap-x-16">
             <div>
               <h2 className="text-faint font-mono text-xs tracking-wider uppercase">Pages</h2>
               <ul className="mt-4 space-y-2.5">

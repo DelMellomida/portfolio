@@ -44,7 +44,7 @@ export interface Command {
   run: (args: string[], ctx: CommandContext) => TerminalLine[] | void;
 }
 
-const ROUTES = ["/", ...navItems.map((n) => n.href), "/playground"];
+const ROUTES = ["/", ...navItems.map((n) => n.href)];
 
 function skillLines(categoryId?: string): TerminalLine[] {
   const categories = categoryId

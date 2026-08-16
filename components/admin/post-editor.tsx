@@ -353,7 +353,7 @@ export function PostEditor({
             }}
             onKeyDown={onBodyKeyDown}
             spellCheck
-            className="bg-surface h-[36rem] w-full resize-none p-5 font-mono text-[13px] leading-relaxed outline-none"
+            className="bg-surface h-[24rem] w-full resize-none p-4 font-mono text-[13px] leading-relaxed outline-none sm:h-[32rem] sm:p-5 lg:h-[36rem]"
           />
           {fieldErrors.body?.[0] && (
             <p className="text-danger px-5 pb-3 text-xs">{fieldErrors.body[0]}</p>
@@ -362,7 +362,7 @@ export function PostEditor({
 
         <div
           className={cn(
-            "border-border bg-bg h-[36rem] overflow-y-auto p-5 lg:block lg:border-l",
+            "border-border bg-bg h-[24rem] overflow-y-auto p-4 sm:h-[32rem] sm:p-5 lg:block lg:h-[36rem] lg:border-l",
             tab === "preview" ? "block" : "hidden",
           )}
         >
