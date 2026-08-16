@@ -3,6 +3,19 @@ import type { ExperienceEntry } from "@/lib/types";
 /** Ported from the old src/data/experience.js, now typed and ordered newest-first. */
 export const experience: ExperienceEntry[] = [
   {
+    company: "DEVCON Philippines",
+    role: "AI Engineering Intern",
+    period: "May 2026 – Present",
+    location: "Philippines",
+    current: true,
+    highlights: [
+      "Building Kai, an offline companion robot on a Jetson Orin Nano — face tracking, wake word, on-device speech recognition, local RAG, and speech synthesis with no cloud on the conversation path.",
+      "Designed the system to degrade rather than fail: a missing camera, servo, or microphone becomes a reported state the robot runs through instead of a startup crash.",
+      "Built the vision, audio, and serial layers behind test seams with injected clocks, giving 1,173 tests that run in about 33 seconds without hardware, network, or models.",
+    ],
+    tech: ["Python", "Jetson Orin Nano", "MediaPipe", "faster-whisper", "Ollama", "Piper TTS", "Flask"],
+  },
+  {
     company: "Ellinov Technologies",
     role: "Software Engineer (Part-Time / Contractor)",
     period: "November 2025 – Present",
@@ -48,5 +61,3 @@ export const experience: ExperienceEntry[] = [
     image: "/images/radius-office.jpg",
   },
 ];
-
-export const currentRole = experience.find((e) => e.current);

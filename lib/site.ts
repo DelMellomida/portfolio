@@ -80,6 +80,7 @@ export const navItems: NavItem[] = [
   { href: "/work", label: "Work" },
   { href: "/blog", label: "Writing" },
   { href: "/skills", label: "Skills" },
+  { href: "/playground", label: "Playground" },
   { href: "/about", label: "About" },
   { href: "/contact", label: "Contact" },
 ];

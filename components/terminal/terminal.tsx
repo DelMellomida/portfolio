@@ -187,7 +187,7 @@ export function Terminal({
 
       <div
         ref={scrollRef}
-        className="text-terminal-fg h-[26rem] overflow-y-auto p-4 font-mono text-[13px] leading-relaxed"
+        className="text-terminal-fg h-[22rem] overflow-y-auto p-3.5 font-mono text-[12px] leading-relaxed sm:h-[26rem] sm:p-4 sm:text-[13px]"
       >
         <div role="log" aria-live="polite" aria-label="Terminal output">
           {lines.map((line, i) => (
@@ -237,9 +237,10 @@ function Line({ line }: { line: TerminalLine }) {
       return <p className="mt-2 font-semibold text-[var(--accent)]">{line.value}</p>;
     case "kv":
       return (
-        <p className="break-words">
-          <span className="text-terminal-fg inline-block w-44 align-top">{line.key}</span>
-          <span className="text-terminal-fg/55">{line.value}</span>
+        // Stacks on narrow screens rather than squeezing a 176px label column.
+        <p className="flex flex-col gap-x-3 break-words sm:flex-row">
+          <span className="text-terminal-fg shrink-0 sm:w-44">{line.key}</span>
+          <span className="text-terminal-fg/55 min-w-0">{line.value}</span>
         </p>
       );
     case "link":
