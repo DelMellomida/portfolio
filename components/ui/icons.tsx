@@ -130,6 +130,33 @@ export function DownloadIcon(props: IconProps) {
   );
 }
 
+export function StarIcon(props: IconProps) {
+  return (
+    <Base {...props}>
+      <path d="m12 3 2.85 5.77 6.37.93-4.61 4.49 1.09 6.35L12 17.54l-5.7 3 1.09-6.35-4.61-4.49 6.37-.93L12 3Z" />
+    </Base>
+  );
+}
+
+export function ForkIcon(props: IconProps) {
+  return (
+    <Base {...props}>
+      <circle cx="6" cy="5" r="2.5" />
+      <circle cx="18" cy="5" r="2.5" />
+      <circle cx="12" cy="19" r="2.5" />
+      <path d="M6 7.5v2a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2v-2M12 11.5v5" />
+    </Base>
+  );
+}
+
+export function DotIcon(props: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" {...props}>
+      <circle cx="12" cy="12" r="10" />
+    </svg>
+  );
+}
+
 export const socialIcons = {
   github: GitHubIcon,
   linkedin: LinkedInIcon,
