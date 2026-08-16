@@ -176,6 +176,62 @@ export async function listRemotePostsWithContent(): Promise<RemoteFileContent[]>
   return loaded.filter((f): f is RemoteFileContent => f !== null);
 }
 
+/* ------------------------------------------------- generic file operations */
+
+function repoContentsPath(filePath: string): string {
+  const { owner, repo } = getRepoConfig();
+  return `/repos/${owner}/${repo}/contents/${filePath}`;
+}
+
+export interface RemoteFileHandle {
+  path: string;
+  sha: string;
+  content: string;
+}
+
+/** Reads any file in the repo. Returns null if it doesn't exist yet. */
+export async function getRemoteFile(filePath: string): Promise<RemoteFileHandle | null> {
+  const { branch } = getRepoConfig();
+
+  try {
+    const file = await gh<ContentsEntry & { content: string }>(
+      `${repoContentsPath(filePath)}?ref=${branch}`,
+    );
+    return {
+      path: file.path,
+      sha: file.sha,
+      content: Buffer.from(file.content, "base64").toString("utf8"),
+    };
+  } catch (error) {
+    if (error instanceof GitHubError && error.status === 404) return null;
+    throw error;
+  }
+}
+
+/**
+ * Writes any file in the repo. Passing `sha` pins the write to that version,
+ * so GitHub rejects it if the file changed underneath us instead of silently
+ * overwriting someone else's edit.
+ */
+export async function writeRemoteFile(options: {
+  path: string;
+  content: string;
+  message: string;
+  sha?: string;
+}): Promise<CommitResult> {
+  const { branch } = getRepoConfig();
+
+  return gh<CommitResult>(repoContentsPath(options.path), {
+    method: "PUT",
+    body: JSON.stringify({
+      message: options.message,
+      content: Buffer.from(options.content, "utf8").toString("base64"),
+      branch,
+      ...(options.sha ? { sha: options.sha } : {}),
+    }),
+  });
+}
+
 export async function deleteRemotePost(options: {
   slug: string;
   sha: string;

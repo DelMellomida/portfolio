@@ -1,7 +1,9 @@
 import { navItems, site, socials } from "./site";
 import { shortBio, education, certifications } from "@/data/profile";
 import { experience } from "@/data/experience";
-import { skillCategories, skillLevelLabel } from "@/data/skills";
+// Type-only: lib/skills.ts reads the filesystem, so importing its runtime here
+// would pull node:fs into the client bundle. Categories arrive via context.
+import { skillLevelLabel, type SkillCategory } from "./skills";
 
 export type TerminalLine =
   | { type: "input"; value: string }
@@ -32,6 +34,8 @@ export interface CommandContext {
   clear: () => void;
   posts: PostSummary[];
   projects: ProjectSummary[];
+  /** Passed in from the server so this module stays filesystem-free. */
+  skills: SkillCategory[];
 }
 
 export interface Command {
@@ -46,17 +50,15 @@ export interface Command {
 
 const ROUTES = ["/", ...navItems.map((n) => n.href)];
 
-function skillLines(categoryId?: string): TerminalLine[] {
-  const categories = categoryId
-    ? skillCategories.filter((c) => c.id === categoryId)
-    : skillCategories;
+function skillLines(all: SkillCategory[], categoryId?: string): TerminalLine[] {
+  const categories = categoryId ? all.filter((c) => c.id === categoryId) : all;
 
   if (categories.length === 0) {
     return [
       { type: "error", value: `no such category: ${categoryId}` },
       {
         type: "muted",
-        value: `available: ${skillCategories.map((c) => c.id).join(", ")}`,
+        value: `available: ${all.map((c) => c.id).join(", ")}`,
       },
     ];
   }
@@ -107,8 +109,8 @@ export const commands: Command[] = [
     name: "skills",
     summary: "List skills, optionally by category",
     usage: "skills [category]",
-    completions: () => skillCategories.map((c) => c.id),
-    run: (args) => skillLines(args[0]),
+    completions: (ctx) => ctx.skills.map((c) => c.id),
+    run: (args, ctx) => skillLines(ctx.skills, args[0]),
   },
   {
     name: "experience",

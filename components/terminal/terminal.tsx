@@ -12,6 +12,7 @@ import {
   type ProjectSummary,
   type TerminalLine,
 } from "@/lib/terminal";
+import type { SkillCategory } from "@/lib/skills";
 import { site } from "@/lib/site";
 import { cn } from "@/lib/utils";
 import { Sudoku } from "@/components/playground/sudoku";
@@ -27,11 +28,13 @@ const BOOT: TerminalLine[] = [
 export function Terminal({
   posts,
   projects,
+  skills,
   className,
   autoFocus = false,
 }: {
   posts: PostSummary[];
   projects: ProjectSummary[];
+  skills: SkillCategory[];
   className?: string;
   autoFocus?: boolean;
 }) {
@@ -54,8 +57,9 @@ export function Terminal({
       clear: () => setLines([]),
       posts,
       projects,
+      skills,
     }),
-    [router, setTheme, posts, projects],
+    [router, setTheme, posts, projects, skills],
   );
 
   // Keep the newest output in view.
