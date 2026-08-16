@@ -1,0 +1,48 @@
+---
+title: Multi-Agent Development Suite
+role: Full-Stack / AI Developer
+period: "2025"
+summary: A suite of documentation, research, and development agents sharing context and memory, with model-agnostic routing that picks between local and cloud LLMs based on cost and latency.
+tech:
+  - Google ADK
+  - Ollama
+  - Python
+  - OpenAI
+  - Claude
+  - Gemini
+featured: true
+order: 2
+image: /images/work/multi-agent-suite.png
+---
+
+## The problem
+
+Single-agent coding assistants lose the thread. Ask one to document a module, then research a library, then write the integration, and each step starts cold — the agent has no memory of what it just learned, so you end up re-explaining your own codebase every few minutes.
+
+The second problem is cost. Routing every request to a frontier model is the easy default and an expensive one. A lot of agent work — file summarization, classification, routing decisions, boilerplate — does not need a frontier model at all, but there is usually no mechanism to make that tradeoff per-call.
+
+## Approach
+
+I built three specialized agents — documentation, research, and development — over a **shared context and memory layer**, so anything one agent learns is available to the others in the same session.
+
+The second piece is a **model-agnostic routing layer**. Rather than binding to one provider, each call declares what it needs (reasoning depth, latency tolerance, context size) and the router picks a backend: a local model via Ollama when the task is cheap and latency-sensitive, a cloud API when the task genuinely needs the capability.
+
+## Architecture
+
+Roughly:
+
+- **Agent layer** — three agents built on Google's Agent Development Kit, each with a scoped tool surface. The documentation agent can read and write files; the research agent can search; the development agent can execute.
+- **Shared memory** — a common store that persists findings across agents within a session, so the research agent's output is directly readable by the development agent without re-prompting.
+- **Router** — a thin abstraction over Ollama, OpenAI, Anthropic, and Gemini. Provider selection is a policy decision, not a code change, which means adding a model is a config edit.
+
+The design goal throughout was that **swapping a model should never require touching agent logic**. Providers change pricing and deprecate models faster than you can rewrite an agent.
+
+## Outcome
+
+The routing layer meant routine calls could run locally at zero marginal cost while genuinely hard reasoning still reached a frontier model — the cost profile of a session became something you could actually tune rather than just absorb.
+
+> **TODO — add your numbers.** If you tracked cost per session before and after routing, or the share of calls that stayed local, put them here. Concrete figures are the single most persuasive thing on a case study page.
+
+## What I'd do differently
+
+Shared memory started as a simple key-value store, and it worked until agents began writing overlapping keys. A scoped namespace per agent with explicit hand-off — rather than one shared surface everything can write to — would have avoided a class of bugs where one agent silently clobbered another's findings.

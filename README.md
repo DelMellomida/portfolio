@@ -1,70 +1,101 @@
-# Getting Started with Create React App
+# Portfolio — Jhondel Mellomida
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Personal site and writing, built with Next.js App Router.
 
-## Available Scripts
+**Stack:** Next.js 16 · React 19 · TypeScript (strict) · Tailwind v4 · MDX · Resend · Vercel
 
-In the project directory, you can run:
+## Getting started
 
-### `npm start`
+```bash
+npm install
+npm run dev        # http://localhost:3000
+```
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+| Script | What it does |
+| --- | --- |
+| `npm run dev` | Dev server |
+| `npm run build` | Production build (fails on type errors *and* invalid MDX frontmatter) |
+| `npm run start` | Serve the production build |
+| `npm run lint` | ESLint |
+| `npm run typecheck` | `tsc --noEmit` |
+| `npm run format` | Prettier |
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Environment variables
 
-### `npm test`
+There is no `.env` in the repo, and there shouldn't be. Copy [`.env.example`](.env.example) to **`.env.local`** for local development — it's gitignored. For production, set the same keys in **Vercel → your project → Settings → Environment Variables**, then redeploy.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+| Variable | Required | Purpose |
+| --- | --- | --- |
+| `NEXT_PUBLIC_SITE_URL` | Yes (production) | Canonical URLs, OG image resolution, sitemap, RSS. No trailing slash. |
+| `RESEND_API_KEY` | For the contact form | Sends contact submissions. Without it the form returns 503 and tells visitors to email directly. |
+| `CONTACT_FROM_EMAIL` | No | Sender address, e.g. `Portfolio <hello@yourdomain.com>`. Defaults to Resend's shared `onboarding@resend.dev`, which works but is more likely to land in spam. Requires a verified domain in Resend. |
+| `ADMIN_PASSWORD` | For `/admin` | The admin login password. |
+| `AUTH_SECRET` | For `/admin` | Signs the admin session cookie. Generate with `node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"`. |
+| `GITHUB_TOKEN` | For `/admin` | Fine-grained PAT scoped to this repo with **Contents: Read and write**. Lets the admin commit posts. |
+| `GITHUB_REPO` | For `/admin` | `owner/repo`, e.g. `DelMellomida/portfolio`. |
+| `GITHUB_BRANCH` | No | Branch the admin commits to. Defaults to `main`. |
 
-### `npm run build`
+## Admin (`/admin`)
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+A password-protected editor for blog posts at [`/admin`](http://localhost:3000/admin).
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+**How it works:** the admin reads and writes MDX files in `content/blog/` through the GitHub Contents API. Saving a post is a real commit, which triggers a Vercel rebuild — so changes appear on the live site after roughly a minute, and every edit keeps its git history.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+- `middleware.ts` guards `/admin/*` and `/api/admin/*`. Unauthenticated page requests redirect to the login screen; API requests get a 401.
+- The session is a signed, HTTP-only cookie with a 12-hour expiry and no server-side store. Signing uses Web Crypto so the same code runs on the Edge runtime.
+- Login is rate-limited to 5 attempts per 10 minutes per IP.
+- The editor previews with the **same** remark/rehype pipeline the published post uses, so Shiki highlighting and GFM tables render exactly as they will live.
+- Updates are pinned to the file's blob SHA, so GitHub rejects a write if the file changed underneath you rather than silently overwriting.
+- `/admin` is `noindex` and disallowed in `robots.txt`.
 
-### `npm run eject`
+**Shortcuts:** `Ctrl/⌘+S` save · `Ctrl/⌘+B` bold · `Ctrl/⌘+I` italic · `Ctrl/⌘+K` link.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+New posts default to `draft: true`, so nothing publishes until you tick **Published**.
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## Adding content
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+### A blog post
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+Create `content/blog/my-post.mdx`:
 
-## Learn More
+```mdx
+---
+title: "Post title"
+description: "One or two sentences — this is the meta description and the OG card subtitle."
+date: "2026-03-01"        # must be quoted, YYYY-MM-DD
+tags: ["AI Agents", "Python"]
+draft: false              # true keeps it off /blog, the sitemap, and the feed
+---
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+Body in MDX. Code fences get syntax highlighting in both themes.
+```
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+Drafts are viewable at their direct URL in dev, and excluded everywhere in production.
 
-### Code Splitting
+### A case study
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+Create `content/work/my-project.mdx` with `title`, `role`, `period`, `summary`, `tech`, `featured`, `order`, and optional `image` / `links`. See the existing files for the shape.
 
-### Analyzing the Bundle Size
+**Quote anything that looks like a number.** `period: 2025` is parsed by YAML as a number and will fail the build — `period: "2025"` is correct.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+Frontmatter is validated by zod in [`lib/content.ts`](lib/content.ts), so a mistake fails `next build` with the offending file named rather than shipping a broken page.
 
-### Making a Progressive Web App
+### Everything else
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+Non-MDX content is typed data, not JSX:
 
-### Advanced Configuration
+- `data/profile.ts` — bio, hero roles, education, certifications
+- `data/experience.ts` — work history
+- `data/skills.ts` — skill categories (also drives the terminal's `skills` command)
+- `lib/site.ts` — name, socials, nav, availability status
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+## Notable pieces
 
-### Deployment
+- **`components/terminal/`** — a real shell on `/skills`: command parsing, Tab completion, `↑`/`↓` history, `Ctrl+L`, `Ctrl+C`. Commands live in [`lib/terminal.ts`](lib/terminal.ts); add one by appending to the `commands` array. `/skills` also server-renders the full skill inventory, so the terminal stays progressive enhancement.
+- **`lib/sudoku.ts`** — 4×4 generator with a uniqueness guarantee, played at `/playground` or via `sudoku` in the terminal.
+- **`lib/og.tsx`** — social cards generated at build time by `next/og`, one per post and case study.
+- **`app/globals.css`** — every color is a CSS variable defined once per theme. Components reference `var(--text-muted)`, never a hardcoded Tailwind gray, which is what keeps the light/dark toggle to a single source of truth.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+## Deployment
 
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Deploys on Vercel from `main`. No `vercel.json` is needed — Next.js routing is handled natively, and `/projects` and `/experience` redirect to their new homes via `next.config.ts`.

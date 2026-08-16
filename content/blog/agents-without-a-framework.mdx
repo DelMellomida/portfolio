@@ -1,0 +1,76 @@
+---
+title: "Building an agent in plain Python before reaching for a framework"
+description: "What you learn writing the tool loop, retrieval, and memory yourself — and which parts are actually worth abstracting afterwards."
+date: "2026-02-14"
+tags: ["AI Agents", "Python", "RAG", "MCP"]
+draft: true
+---
+
+There is a strong pull toward starting agent work inside a framework. The demos are short, the abstractions look reasonable, and you get something running in an afternoon.
+
+I built a Solution Architect Agent — one that takes a feature request and produces an architecture design — in plain Python with the OpenAI SDK, ChromaDB for retrieval, and an MCP server for tool exposure. No agent framework. Here's what that taught me.
+
+## The agent loop is about twenty lines
+
+Stripped of abstraction, an agent is a loop:
+
+```python
+messages = [{"role": "system", "content": SYSTEM_PROMPT}, user_message]
+
+while True:
+    response = client.chat.completions.create(
+        model=MODEL, messages=messages, tools=TOOL_SCHEMAS
+    )
+    message = response.choices[0].message
+    messages.append(message)
+
+    if not message.tool_calls:
+        return message.content
+
+    for call in message.tool_calls:
+        result = dispatch(call.function.name, json.loads(call.function.arguments))
+        messages.append({
+            "role": "tool",
+            "tool_call_id": call.id,
+            "content": json.dumps(result),
+        })
+```
+
+That is the whole mechanism. Everything a framework adds sits on top of this — and knowing that changes how you read framework documentation, because you can see which abstractions are load-bearing and which are ergonomics.
+
+## What writing it yourself surfaces
+
+**Context growth is the real constraint.** Every tool result is appended to the message list, so a long agent run grows its own context until it hits the window. Frameworks hide this behind a memory abstraction, which is convenient right up until you need to know *why* the agent forgot something. Writing it yourself makes the tradeoff explicit: you decide what gets summarized, what gets dropped, and what stays verbatim.
+
+**Tool errors are prompts.** A tool that throws and returns a stack trace is feeding that stack trace to the model as input. Error messages become part of the prompt surface, so they should be written for a model to act on — `"file not found: config.yaml. Available files: app.yaml, settings.yaml"` recovers; `"FileNotFoundError"` does not.
+
+**Retrieval quality dominates model quality.** For a task grounded in existing architecture docs, most bad outputs traced back to retrieving the wrong chunks, not to the model reasoning badly over the right ones. Time spent on chunking strategy and embedding the *right* text paid off more than time spent on prompt wording.
+
+## Where MCP fits
+
+Exposing tools through an MCP server rather than hardcoding them into the agent turned out to be the most portable decision.
+
+The tools — reading docs, querying the vector store, writing design output — become a service with a defined interface rather than functions living inside one agent's process. Any MCP-speaking client can use them. When the agent was adopted as the internal framework standard, that separation was what made it adoptable: teams could point their own clients at the same tool surface instead of forking the agent.
+
+## What I'd abstract, in hindsight
+
+Not everything is worth writing from scratch twice. After building it once, the parts I'd factor out:
+
+- **The loop itself** — it's stable and identical everywhere. Write it once, keep it small.
+- **Tool registration and schema generation** — deriving JSON schemas from Python type hints is mechanical and error-prone by hand.
+- **Retries and structured-output validation** — worth centralizing, since every call site needs the same behaviour.
+
+The parts I'd keep explicit and per-agent:
+
+- **Memory and context policy** — what gets kept and dropped is a product decision, not infrastructure.
+- **Prompt construction** — the moment this is hidden behind a builder, debugging output quality gets much harder.
+
+## The honest recommendation
+
+Frameworks are fine. Use one if it fits.
+
+But build the loop yourself once first, because the abstraction you get handed is much easier to evaluate when you know exactly what it's abstracting. It's an afternoon of work, and it turns framework selection from a guess into a comparison.
+
+---
+
+> This post is a draft. Review it before publishing — check that the technical claims match your actual implementation, and consider adding a concrete before/after example.
