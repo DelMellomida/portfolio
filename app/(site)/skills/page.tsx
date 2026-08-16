@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import { skillCategories, skillLevelLabel } from "@/data/skills";
+import { getSkillCategories } from "@/lib/skills-server";
+import { skillLevelLabel } from "@/lib/skills";
 import { getAllPosts, getAllProjects } from "@/lib/content";
 import { PageHeader, Section, Tag } from "@/components/ui/primitives";
 import { Terminal } from "@/components/terminal/terminal";
@@ -18,6 +19,7 @@ export const metadata: Metadata = {
 };
 
 export default function SkillsPage() {
+  const skillCategories = getSkillCategories();
   const posts = getAllPosts().map((p) => ({
     slug: p.slug,
     title: p.title,
@@ -38,7 +40,7 @@ export default function SkillsPage() {
         description="A real shell — type `help` to start, or `skills ai` to jump straight in. Tab completes and the arrow keys recall history. Everything here is also listed below."
       />
 
-      <Terminal posts={posts} projects={projects} />
+      <Terminal posts={posts} projects={projects} skills={skillCategories} />
 
       {/*
         Server-rendered inventory. The terminal is progressive enhancement:
