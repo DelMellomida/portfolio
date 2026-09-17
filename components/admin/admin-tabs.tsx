@@ -6,12 +6,17 @@ import { cn } from "@/lib/utils";
 
 const tabs = [
   { href: "/admin", label: "Posts" },
+  { href: "/admin/experience", label: "Experience" },
   { href: "/admin/skills", label: "Skills" },
 ];
 
 function isActive(pathname: string, href: string) {
   // /admin would otherwise match /admin/skills too.
-  return href === "/admin" ? pathname === "/admin" || pathname.startsWith("/admin/edit") || pathname.startsWith("/admin/new") : pathname.startsWith(href);
+  return href === "/admin"
+    ? pathname === "/admin" ||
+        pathname.startsWith("/admin/edit") ||
+        pathname.startsWith("/admin/new")
+    : pathname.startsWith(href);
 }
 
 export function AdminTabs() {
