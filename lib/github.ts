@@ -189,6 +189,13 @@ export interface RemoteFileHandle {
   content: string;
 }
 
+export interface RemoteDirectoryEntry {
+  name: string;
+  path: string;
+  sha: string;
+  type: string;
+}
+
 /** Reads any file in the repo. Returns null if it doesn't exist yet. */
 export async function getRemoteFile(filePath: string): Promise<RemoteFileHandle | null> {
   const { branch } = getRepoConfig();
@@ -204,6 +211,23 @@ export async function getRemoteFile(filePath: string): Promise<RemoteFileHandle 
     };
   } catch (error) {
     if (error instanceof GitHubError && error.status === 404) return null;
+    throw error;
+  }
+}
+
+export async function listRemoteDirectory(dirPath: string): Promise<RemoteDirectoryEntry[]> {
+  const { branch } = getRepoConfig();
+
+  try {
+    const entries = await gh<ContentsEntry[]>(`${repoContentsPath(dirPath)}?ref=${branch}`);
+    return entries.map((entry) => ({
+      name: entry.name,
+      path: entry.path,
+      sha: entry.sha,
+      type: entry.type,
+    }));
+  } catch (error) {
+    if (error instanceof GitHubError && error.status === 404) return [];
     throw error;
   }
 }
