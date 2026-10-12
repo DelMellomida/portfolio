@@ -2,7 +2,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { Suspense } from "react";
 import { ActivityFeed } from "@/components/github/activity-feed";
-import { site, primarySocials, siteUrl } from "@/lib/site";
+import { site, primarySocials } from "@/lib/site";
+import { personJsonLd, profilePageJsonLd, websiteJsonLd } from "@/lib/seo";
 import { heroRoles, shortBio } from "@/data/profile";
 import { experience } from "@/data/experience";
 import { getSkillCategories } from "@/lib/skills-server";
@@ -19,32 +20,14 @@ export default function HomePage() {
   const posts = getAllPosts().slice(0, 3);
   const skillCategories = getSkillCategories();
 
-  const personJsonLd = {
-    "@context": "https://schema.org",
-    "@type": "Person",
-    name: site.name,
-    url: siteUrl,
-    jobTitle: site.role,
-    email: site.email,
-    description: site.description,
-    address: { "@type": "PostalAddress", addressLocality: site.location },
-    alumniOf: {
-      "@type": "CollegeOrUniversity",
-      name: "Pamantasan ng Lungsod ng Pasig",
-    },
-    worksFor: [
-      { "@type": "Organization", name: "Ellinov Technologies" },
-      { "@type": "Organization", name: "DEVCON Philippines" },
-    ],
-    knowsAbout: skillCategories.flatMap((c) => c.skills.map((s) => s.name)),
-    sameAs: primarySocials.filter((s) => s.key !== "email").map((s) => s.href),
-  };
+  const knowsAbout = skillCategories.flatMap((c) => c.skills.map((s) => s.name));
+  const structuredData = [personJsonLd(knowsAbout), websiteJsonLd(), profilePageJsonLd()];
 
   return (
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
       />
 
       {/* Hero */}

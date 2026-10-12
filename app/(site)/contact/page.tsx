@@ -1,32 +1,31 @@
 import type { Metadata } from "next";
 import { site, socials } from "@/lib/site";
+import { pageMetadata } from "@/lib/seo";
 import { PageHeader } from "@/components/ui/primitives";
 import { ContactForm } from "@/components/contact/contact-form";
 import { socialIcons, DownloadIcon } from "@/components/ui/icons";
 
-export const metadata: Metadata = {
-  title: "Contact",
-  description: `Get in touch with ${site.name} about engineering roles, AI/ML work, or freelance collaborations.`,
-  alternates: { canonical: "/contact" },
-  openGraph: {
-    title: "Contact",
-    description: `Get in touch with ${site.name}.`,
-    url: "/contact",
-  },
-};
+export const metadata: Metadata = pageMetadata({
+  title: `Contact ${site.name}`,
+  description: `Contact ${site.name} about software engineering roles, AI/ML systems, backend work, or freelance collaborations.`,
+  path: "/contact",
+});
 
 const openTo = [
   {
     title: "Full-time roles",
-    detail: "AI/ML engineering and backend-leaning full-stack positions, onsite in Metro Manila or remote.",
+    detail:
+      "AI/ML engineering and backend-leaning full-stack positions, onsite in Metro Manila or remote.",
   },
   {
     title: "Freelance & contract",
-    detail: "Agent systems, RAG pipelines, API design, and observability setup — scoped projects welcome.",
+    detail:
+      "Agent systems, RAG pipelines, API design, and observability setup; scoped projects welcome.",
   },
   {
     title: "Collaboration",
-    detail: "Open source, hackathons, or anything involving agents doing something genuinely useful.",
+    detail:
+      "Open source, hackathons, or anything involving agents doing something genuinely useful.",
   },
 ];
 
@@ -94,7 +93,7 @@ export default function ContactPage() {
                   className="text-muted hover:text-text hover:bg-surface-hover -mx-2 flex items-center gap-2.5 rounded-md px-2 py-1.5 text-sm transition-colors"
                 >
                   <DownloadIcon className="size-4 shrink-0" />
-                  Résumé (PDF)
+                  Resume (PDF)
                 </a>
               </li>
             </ul>

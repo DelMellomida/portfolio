@@ -8,6 +8,7 @@ import { Suspense } from "react";
 import { ArrowLink, Tag } from "@/components/ui/primitives";
 import { ExternalLinkIcon, GitHubIcon } from "@/components/ui/icons";
 import { RepoStats } from "@/components/github/repo-stats";
+import { pageMetadata } from "@/lib/seo";
 
 type Params = Promise<{ slug: string }>;
 
@@ -21,19 +22,25 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
   if (!project) return {};
 
   return {
-    title: project.title,
-    description: project.summary,
-    alternates: { canonical: `/work/${slug}` },
+    ...pageMetadata({
+      title: project.title,
+      description: project.summary,
+      path: `/work/${slug}`,
+      type: "article",
+    }),
     openGraph: {
       type: "article",
       title: project.title,
       description: project.summary,
       url: `/work/${slug}`,
-    },
-    twitter: {
-      card: "summary_large_image",
-      title: project.title,
-      description: project.summary,
+      images: [
+        {
+          url: project.image ?? "/opengraph-image",
+          width: 1200,
+          height: 630,
+          alt: `${project.title} case study by Jhondel Mellomida`,
+        },
+      ],
     },
   };
 }
@@ -101,7 +108,7 @@ export default async function ProjectPage({ params }: { params: Params }) {
       {project.image && (
         <Image
           src={project.image}
-          alt={`${project.title} screenshot`}
+          alt={`${project.title} project screenshot`}
           width={1200}
           height={675}
           sizes="(max-width: 768px) 100vw, 768px"

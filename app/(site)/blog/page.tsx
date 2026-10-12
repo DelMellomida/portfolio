@@ -1,20 +1,16 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { getAllPosts } from "@/lib/content";
+import { pageMetadata } from "@/lib/seo";
 import { PageHeader, Tag } from "@/components/ui/primitives";
 import { formatDate } from "@/lib/utils";
 
-export const metadata: Metadata = {
-  title: "Writing",
+export const metadata: Metadata = pageMetadata({
+  title: "Writing on AI Systems",
   description:
-    "Notes on AI agent systems, retrieval pipelines, observability, and the engineering around them.",
-  alternates: { canonical: "/blog" },
-  openGraph: {
-    title: "Writing",
-    description: "Notes on AI agent systems, observability, and backend engineering.",
-    url: "/blog",
-  },
-};
+    "Technical writing by Jhondel Mellomida on AI agent systems, retrieval pipelines, observability, and backend engineering.",
+  path: "/blog",
+});
 
 export default function BlogPage() {
   const posts = getAllPosts();
@@ -24,7 +20,7 @@ export default function BlogPage() {
       <PageHeader
         label="Writing"
         title="Notes"
-        description="Mostly about building AI systems that have to survive contact with production — agents, retrieval, and the observability that tells you when they break."
+        description="Mostly about building AI systems that have to survive contact with production: agents, retrieval, and the observability that tells you when they break."
       />
 
       {posts.length === 0 ? (

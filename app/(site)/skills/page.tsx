@@ -2,21 +2,17 @@ import type { Metadata } from "next";
 import { getSkillCategories } from "@/lib/skills-server";
 import { skillLevelLabel } from "@/lib/skills";
 import { getAllPosts, getAllProjects } from "@/lib/content";
+import { pageMetadata } from "@/lib/seo";
 import { PageHeader, Section, Tag } from "@/components/ui/primitives";
 import { Terminal } from "@/components/terminal/terminal";
 import { formatDateShort } from "@/lib/utils";
 
-export const metadata: Metadata = {
-  title: "Skills",
+export const metadata: Metadata = pageMetadata({
+  title: "Software Engineering Skills",
   description:
-    "Languages, frameworks, AI tooling, cloud, and databases I work with — explorable through an interactive terminal or as a plain list.",
-  alternates: { canonical: "/skills" },
-  openGraph: {
-    title: "Skills",
-    description: "An interactive terminal for exploring what I work with.",
-    url: "/skills",
-  },
-};
+    "Jhondel Mellomida's skills across AI tooling, agent systems, Python, TypeScript, cloud, databases, and observability.",
+  path: "/skills",
+});
 
 export default function SkillsPage() {
   const skillCategories = getSkillCategories();
@@ -37,16 +33,11 @@ export default function SkillsPage() {
       <PageHeader
         label="Skills"
         title="Explore the stack"
-        description="A real shell — type `help` to start, or `skills ai` to jump straight in. Tab completes and the arrow keys recall history. Everything here is also listed below."
+        description="A real shell: type `help` to start, or `skills ai` to jump straight in. Tab completes and the arrow keys recall history. Everything here is also listed below."
       />
 
       <Terminal posts={posts} projects={projects} skills={skillCategories} />
 
-      {/*
-        Server-rendered inventory. The terminal is progressive enhancement:
-        crawlers, screen readers, and no-JS visitors all get the full list.
-        The old /skills page rendered none of this into the HTML.
-      */}
       <Section id="inventory" label="Reference" title="Full skill inventory">
         <div className="space-y-10">
           {skillCategories.map((cat) => (
@@ -66,7 +57,7 @@ export default function SkillsPage() {
                     <span className="text-sm">
                       {skill.name}
                       {skill.note && (
-                        <span className="text-faint ml-2 text-xs">— {skill.note}</span>
+                        <span className="text-faint ml-2 text-xs">- {skill.note}</span>
                       )}
                     </span>
                     <Tag size="sm" className="shrink-0">
