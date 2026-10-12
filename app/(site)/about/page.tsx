@@ -1,11 +1,13 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import { bio, certifications, education, interests } from "@/data/profile";
+import { visibleCertificates } from "@/data/certificates";
+import { bio, education, interests } from "@/data/profile";
 import { experience } from "@/data/experience";
 import { site } from "@/lib/site";
 import { pageMetadata, personJsonLd } from "@/lib/seo";
 import { ExperienceList } from "@/components/experience-list";
-import { ButtonLink, PageHeader, Section } from "@/components/ui/primitives";
+import { ExternalLinkIcon } from "@/components/ui/icons";
+import { ButtonLink, PageHeader, Section, Tag } from "@/components/ui/primitives";
 
 export const metadata: Metadata = pageMetadata({
   title: `About ${site.name}`,
