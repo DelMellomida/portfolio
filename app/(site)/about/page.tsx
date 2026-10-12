@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import { bio, certifications, education, interests } from "@/data/profile";
+import { visibleCertificates } from "@/data/certificates";
+import { bio, education, interests } from "@/data/profile";
 import { experience } from "@/data/experience";
 import { site } from "@/lib/site";
 import { ExperienceList } from "@/components/experience-list";
-import { ButtonLink, PageHeader, Section } from "@/components/ui/primitives";
+import { ExternalLinkIcon } from "@/components/ui/icons";
+import { ButtonLink, PageHeader, Section, Tag } from "@/components/ui/primitives";
 
 export const metadata: Metadata = {
   title: "About",
@@ -62,7 +64,9 @@ export default function AboutPage() {
                   <p className="text-sm font-medium">{e.credential}</p>
                   <p className="text-muted mt-0.5 text-sm">{e.institution}</p>
                   <p className="text-faint mt-0.5 font-mono text-xs">{e.period}</p>
-                  {e.detail && <p className="text-muted mt-2 text-sm leading-relaxed">{e.detail}</p>}
+                  {e.detail && (
+                    <p className="text-muted mt-2 text-sm leading-relaxed">{e.detail}</p>
+                  )}
                 </li>
               ))}
             </ul>
@@ -70,17 +74,37 @@ export default function AboutPage() {
 
           <div>
             <h3 className="font-mono text-sm font-medium">Certifications</h3>
-            <ul className="mt-4 space-y-5">
-              {certifications.map((c) => (
-                <li key={c.issuer}>
-                  <p className="text-sm font-medium">{c.issuer}</p>
-                  <ul className="text-muted mt-1.5 space-y-1 text-sm">
-                    {c.items.map((item) => (
-                      <li key={item} className="before:text-faint before:mr-2 before:content-['—']">
-                        {item}
-                      </li>
-                    ))}
-                  </ul>
+            <ul className="mt-4 grid gap-3">
+              {visibleCertificates.map((certificate) => (
+                <li
+                  key={certificate.id}
+                  className="border-border bg-surface rounded-[--radius-card] border p-4"
+                >
+                  <div className="flex flex-wrap items-start justify-between gap-3">
+                    <div>
+                      <p className="text-sm font-medium">{certificate.title}</p>
+                      <p className="text-muted mt-1 text-sm">{certificate.issuer}</p>
+                      <p className="text-faint mt-1 font-mono text-xs">{certificate.issuedAt}</p>
+                    </div>
+                    <a
+                      href={certificate.file}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-muted hover:text-text hover:bg-surface-hover inline-flex h-8 shrink-0 items-center gap-1.5 rounded-md px-2.5 font-mono text-xs transition-colors"
+                    >
+                      View
+                      <ExternalLinkIcon className="size-3.5" />
+                    </a>
+                  </div>
+                  {certificate.tags.length > 0 && (
+                    <ul className="mt-3 flex flex-wrap gap-1.5">
+                      {certificate.tags.map((tag) => (
+                        <li key={tag}>
+                          <Tag size="sm">{tag}</Tag>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
                 </li>
               ))}
             </ul>

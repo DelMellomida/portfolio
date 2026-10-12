@@ -8,6 +8,7 @@ const tabs = [
   { href: "/admin", label: "Posts" },
   { href: "/admin/experience", label: "Experience" },
   { href: "/admin/skills", label: "Skills" },
+  { href: "/admin/certificates", label: "Certificates" },
 ];
 
 function isActive(pathname: string, href: string) {
