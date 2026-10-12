@@ -3,6 +3,7 @@ import { Geist, JetBrains_Mono } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { site, siteUrl } from "@/lib/site";
+import { pageMetadata } from "@/lib/seo";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -17,16 +18,26 @@ const jetbrainsMono = JetBrains_Mono({
   display: "swap",
 });
 
+const googleVerification = process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION;
+
 export const metadata: Metadata = {
+  ...pageMetadata({
+    title: `${site.name} - ${site.role}`,
+    description: site.description,
+    path: "/",
+  }),
   metadataBase: new URL(siteUrl),
   title: {
-    default: `${site.name} — ${site.role}`,
-    template: `%s — ${site.name}`,
+    default: `${site.name} - ${site.role}`,
+    template: `%s - ${site.name}`,
   },
-  description: site.description,
   keywords: [
+    "Jhondel Mellomida",
+    "Jhondel Mellomida portfolio",
+    "Jhondel Mellomida software engineer",
     "software engineer",
     "AI engineer",
+    "AI systems engineer",
     "LLM",
     "agent systems",
     "RAG",
@@ -39,30 +50,19 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: site.name, url: siteUrl }],
   creator: site.name,
+  publisher: site.name,
   alternates: {
     canonical: "/",
     types: {
-      "application/rss+xml": [{ url: "/feed.xml", title: `${site.name} — Writing` }],
+      "application/rss+xml": [{ url: "/feed.xml", title: `${site.name} - Writing` }],
     },
-  },
-  openGraph: {
-    type: "website",
-    locale: site.locale,
-    url: siteUrl,
-    siteName: site.name,
-    title: `${site.name} — ${site.role}`,
-    description: site.description,
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: `${site.name} — ${site.role}`,
-    description: site.description,
   },
   robots: {
     index: true,
     follow: true,
     googleBot: { index: true, follow: true, "max-image-preview": "large" },
   },
+  ...(googleVerification ? { verification: { google: googleVerification } } : {}),
 };
 
 export const viewport: Viewport = {
@@ -79,7 +79,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         {/*
           Chrome and the theme provider live in the (site) and admin layouts,
           not here. The admin needs its own header, and its ThemeProvider needs
-          a CSP nonce read from request headers — doing that here would make
+          a CSP nonce read from request headers - doing that here would make
           the root layout dynamic and drag every static page down with it.
         */}
         {children}

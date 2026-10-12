@@ -5,6 +5,7 @@ import { getAllPosts, getPost } from "@/lib/content";
 import { mdxComponents, mdxOptions } from "@/lib/mdx";
 import { ArrowLink, Tag } from "@/components/ui/primitives";
 import { site, siteUrl } from "@/lib/site";
+import { pageMetadata } from "@/lib/seo";
 import { formatDate } from "@/lib/utils";
 
 type Params = Promise<{ slug: string }>;
@@ -19,9 +20,12 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
   if (!post) return {};
 
   return {
-    title: post.title,
-    description: post.description,
-    alternates: { canonical: `/blog/${slug}` },
+    ...pageMetadata({
+      title: post.title,
+      description: post.description,
+      path: `/blog/${slug}`,
+      type: "article",
+    }),
     openGraph: {
       type: "article",
       title: post.title,
@@ -30,11 +34,14 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
       publishedTime: post.date,
       authors: [site.name],
       tags: post.tags,
-    },
-    twitter: {
-      card: "summary_large_image",
-      title: post.title,
-      description: post.description,
+      images: [
+        {
+          url: "/opengraph-image",
+          width: 1200,
+          height: 630,
+          alt: `${post.title} by ${site.name}`,
+        },
+      ],
     },
   };
 }

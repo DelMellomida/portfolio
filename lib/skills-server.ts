@@ -18,7 +18,7 @@ let cached: SkillCategory[] | null = null;
 export function getSkillCategories(): SkillCategory[] {
   if (cached) return cached;
 
-  const file = path.join(process.cwd(), SKILLS_PATH);
+  const file = path.join(/* turbopackIgnore: true */ process.cwd(), SKILLS_PATH);
   try {
     cached = parseSkills(fs.readFileSync(file, "utf8"));
     return cached;

@@ -4,10 +4,20 @@ import { siteUrl } from "@/lib/site";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const staticRoutes = [
-    { path: "", priority: 1, changeFrequency: "monthly" as const },
+    {
+      path: "",
+      priority: 1,
+      changeFrequency: "monthly" as const,
+      images: [`${siteUrl}/images/me.jpg`],
+    },
     { path: "/work", priority: 0.9, changeFrequency: "monthly" as const },
     { path: "/blog", priority: 0.9, changeFrequency: "weekly" as const },
-    { path: "/about", priority: 0.8, changeFrequency: "monthly" as const },
+    {
+      path: "/about",
+      priority: 0.8,
+      changeFrequency: "monthly" as const,
+      images: [`${siteUrl}/images/me.jpg`],
+    },
     { path: "/skills", priority: 0.7, changeFrequency: "monthly" as const },
     { path: "/contact", priority: 0.6, changeFrequency: "yearly" as const },
     { path: "/playground", priority: 0.4, changeFrequency: "yearly" as const },
@@ -16,6 +26,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     lastModified: new Date(),
     changeFrequency: r.changeFrequency,
     priority: r.priority,
+    ...("images" in r ? { images: r.images } : {}),
   }));
 
   const projects = getAllProjects().map((p) => ({
@@ -23,6 +34,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     lastModified: new Date(),
     changeFrequency: "yearly" as const,
     priority: 0.8,
+    ...(p.image ? { images: [`${siteUrl}${p.image}`] } : {}),
   }));
 
   const posts = getAllPosts().map((p) => ({

@@ -4,24 +4,25 @@ import { visibleCertificates } from "@/data/certificates";
 import { bio, education, interests } from "@/data/profile";
 import { experience } from "@/data/experience";
 import { site } from "@/lib/site";
+import { pageMetadata, personJsonLd } from "@/lib/seo";
 import { ExperienceList } from "@/components/experience-list";
 import { ExternalLinkIcon } from "@/components/ui/icons";
 import { ButtonLink, PageHeader, Section, Tag } from "@/components/ui/primitives";
 
-export const metadata: Metadata = {
-  title: "About",
-  description: `${site.name} — software engineer working on AI agent systems, backend architecture, and observability. Background, experience, and education.`,
-  alternates: { canonical: "/about" },
-  openGraph: {
-    title: "About",
-    description: `Background and experience of ${site.name}, software engineer.`,
-    url: "/about",
-  },
-};
+export const metadata: Metadata = pageMetadata({
+  title: `About ${site.name}`,
+  description: `${site.name} is a software engineer in Metro Manila building AI agent systems, backend services, and observability tooling.`,
+  path: "/about",
+});
 
 export default function AboutPage() {
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd()) }}
+      />
+
       <PageHeader label="About" title="Background" />
 
       <div className="flex flex-col-reverse gap-10 md:flex-row md:gap-12">
@@ -41,7 +42,7 @@ export default function AboutPage() {
         <div className="shrink-0">
           <Image
             src="/images/cat.png"
-            alt=""
+            alt="Personal photo from Jhondel Mellomida's portfolio"
             width={240}
             height={240}
             sizes="(max-width: 768px) 180px, 240px"
@@ -116,7 +117,7 @@ export default function AboutPage() {
         <div className="border-border bg-bg-subtle rounded-[--radius-card] border p-8 sm:p-10">
           <h2 className="text-xl">Want the short version?</h2>
           <p className="text-muted mt-2 text-sm leading-relaxed">
-            The résumé covers the same ground in one page.
+            The resume covers the same ground in one page.
           </p>
           <div className="mt-6 flex flex-wrap gap-3">
             <a
@@ -125,7 +126,7 @@ export default function AboutPage() {
               rel="noopener noreferrer"
               className="bg-accent text-accent-fg hover:bg-accent-hover inline-flex h-10 items-center gap-2 rounded-md px-4 text-sm font-medium transition-colors"
             >
-              Download résumé
+              Download resume
             </a>
             <ButtonLink href="/contact" variant="secondary">
               Get in touch

@@ -3,7 +3,7 @@ import { getAllPosts, getPost } from "@/lib/content";
 import { ogImage, OG_CONTENT_TYPE, OG_SIZE } from "@/lib/og";
 import { formatDateShort } from "@/lib/utils";
 
-export const alt = "Blog post";
+export const alt = "Jhondel Mellomida blog post social preview";
 export const size = OG_SIZE;
 export const contentType = OG_CONTENT_TYPE;
 
