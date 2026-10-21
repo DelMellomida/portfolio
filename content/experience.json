@@ -2,7 +2,7 @@
   {
     "company": "DEVCON Philippines",
     "role": "AI Engineering Intern",
-    "period": "May 2026 – Aug 2026",
+    "period": "May 2026 – Sep 2026",
     "location": "Philippines",
     "highlights": [
       "Building Kai, an offline companion robot on a Jetson Orin Nano — face tracking, wake word, on-device speech recognition, local RAG, and speech synthesis with no cloud on the conversation path.",
