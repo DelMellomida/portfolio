@@ -1,0 +1,54 @@
+---
+title: Local Cutout
+role: Full-Stack / ML Developer
+period: "2026"
+summary: A free, open-source remove.bg alternative that removes image backgrounds entirely in the browser, with no uploads, accounts, watermarks, or usage credits.
+tech:
+  - Astro
+  - TypeScript
+  - Transformers.js
+  - ONNX Runtime Web
+  - Web Workers
+  - WebGPU
+  - Cloudflare Workers
+featured: true
+order: 0
+image: /images/work/local-cutout.png
+links:
+  repo: https://github.com/DelMellomida/local-cutout
+  demo: https://local-cutout.jhondel-tools.workers.dev/
+---
+
+## The problem
+
+[remove.bg is moving its standalone background-removal product into Canva](https://www.remove.bg/faq), leaving people who only want a transparent PNG with a more complicated choice: upload the image to another service, create an account, accept a watermark or usage limit, or install a local tool.
+
+Local Cutout keeps that simple workflow—a file goes in and a transparent PNG comes out—but moves the entire image-processing path into the browser. The selected image is never uploaded, there is no account, and the result has no watermark.
+
+## Approach
+
+The first cutout uses a quantized **MODNet** model through Transformers.js and ONNX Runtime Web. It runs with the WebAssembly backend inside a dedicated Web Worker, keeping inference away from the page's main thread so the interface stays responsive.
+
+For difficult edges such as hair, fur, and low-contrast subjects, devices with WebGPU can run an optional second pass with **BiRefNet Lite**. The tool also includes Restore and Erase brushes for corrections that are faster to make by hand than by rerunning a model.
+
+## Privacy by architecture
+
+“Private” is a property of the data flow, not just a sentence in a privacy policy.
+
+- The image is decoded, resized, processed, previewed, and exported inside the browser tab.
+- A Web Worker receives the pixels through a transferable buffer; no application server receives them.
+- The browser downloads version-pinned model files through a restricted Cloudflare route.
+- The edge worker only permits known model repositories and revisions, and rejects traversal attempts.
+- The privacy page explains what network requests users should expect and how to verify the claim in browser developer tools.
+
+## Product constraints
+
+Local inference trades server cost and upload risk for the limits of the user's device. The tool accepts PNG, JPG, and WebP files up to 20 MB, rejects images above 40 megapixels, and scales the longest side to 2,000 pixels before inference. The fast model is cached after its first download; the more accurate model is optional because its fp16 artifact is roughly 100 MB and requires WebGPU.
+
+Those constraints are visible in the interface instead of being hidden behind a generic failure message. Browsers without WebGPU still get the fast cutout and manual editing tools.
+
+## Outcome
+
+The deployed app provides a complete background-removal workflow with local inference, before-and-after comparison, manual edge correction, and transparent PNG export. It is open source under Apache-2.0 and deployed as an Astro site with Cloudflare Workers Static Assets.
+
+[Try Local Cutout](https://local-cutout.jhondel-tools.workers.dev/) or [read the implementation](https://github.com/DelMellomida/local-cutout).

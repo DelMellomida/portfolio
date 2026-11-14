@@ -1,0 +1,65 @@
+---
+title: "Building a private remove.bg alternative that runs in the browser"
+description: "Why I built Local Cutout around browser-side inference, and what it took to keep image pixels off the server without giving up a usable editing workflow."
+date: "2026-11-14"
+tags: ["Machine Learning", "WebGPU", "Privacy", "Astro"]
+draft: false
+---
+
+remove.bg's standalone product is going away. Its [official FAQ](https://www.remove.bg/faq) says the website and accounts will no longer be available from December 1, 2026 at 9:00 a.m. CET. Background removal is moving into Canva, while self-service API users are being directed to Leonardo.Ai.
+
+That does not mean the technology disappears. But it does change a wonderfully narrow workflow: open a dedicated page, choose an image, and download a transparent PNG.
+
+I built [Local Cutout](https://local-cutout.jhondel-tools.workers.dev/) as an open-source alternative for that specific job. It is free, requires no account, adds no watermark, and—most importantly—does not upload the image.
+
+## The privacy claim had to be architectural
+
+Many image tools say they respect privacy while still sending the file to a server for processing. The server may delete it quickly, encrypt it, or avoid using it for training, but the image still leaves the device.
+
+Local Cutout takes a simpler position: the server cannot retain an image it never receives.
+
+The browser decodes the selected file, resizes it in memory, sends its pixels to a Web Worker, applies the returned alpha mask, and encodes the final canvas as a PNG. The network is only used to load the application, runtime, and model files. You can verify that behavior by opening the Network panel and processing an image: there is no request body containing the selected photo.
+
+## Why a Web Worker matters
+
+Running a segmentation model in the browser is useful only if the page remains usable while it works.
+
+The fast path runs a quantized MODNet model through Transformers.js and ONNX Runtime Web. Inference happens in a dedicated Web Worker using WebAssembly, and pixel buffers are transferred rather than copied between the page and worker. That keeps the expensive work away from the main thread and avoids duplicating a large image buffer unnecessarily.
+
+The model is pinned to a specific revision and cached by the browser after the first download. Pinning matters here: a model is executable behavior and a supply-chain dependency, not just a static asset that can safely drift underneath the application.
+
+## One model was not enough
+
+MODNet is a good default because it is small enough for a practical first-run download and works across modern browsers. Its limits show up around fine hair, fur, transparent material, and low-contrast edges—the places where background removal becomes image matting rather than simple subject detection.
+
+For devices with WebGPU, Local Cutout offers an optional **Improve accuracy** pass using BiRefNet Lite. It is deliberately not the default: its fp16 model is roughly 100 MB, and making every visitor download it would turn accuracy into a poor product decision.
+
+There is also a point where another model pass is less useful than a brush. Restore and Erase tools let users correct the alpha channel directly while preserving the original RGB pixels. The result is a small hybrid workflow: fast automation first, a heavier model when the device supports it, and manual control for the last few edges.
+
+## Browser limits are product decisions
+
+Local inference removes an application server from the hot path, but it does not remove resource constraints. It moves them onto an enormous range of phones and laptops.
+
+The app therefore:
+
+- accepts PNG, JPG, and WebP files up to 20 MB;
+- inspects file signatures instead of trusting extensions;
+- rejects images above 40 megapixels before decoding them into an even larger working buffer;
+- scales the longest side to 2,000 pixels for predictable memory use and inference time; and
+- falls back to MODNet plus manual tools when WebGPU is unavailable.
+
+These are not arbitrary validation rules. They are the boundary between “runs locally” as a demo and a tool that fails predictably on real devices.
+
+## Static site, narrow edge worker
+
+Astro produces the interface as static, crawlable HTML. Cloudflare Workers serves the built assets and exposes a restricted model route to Hugging Face.
+
+That route is an allowlist, not an open proxy. It accepts only the two expected model repositories and their pinned revisions, rejects traversal paths, and applies cross-origin and caching headers to the response. The architecture stays narrow: the edge handles static delivery and controlled model downloads; the browser owns image processing.
+
+## What Local Cutout is—and is not
+
+Local Cutout is a replacement for the interactive “give me a transparent PNG” use case. It is not a drop-in replacement for remove.bg's API, bulk automation, or enterprise contracts. Those users need a hosted API such as the official Leonardo.Ai migration path, or a model they operate themselves.
+
+For one-off cutouts, though, local inference has a useful property beyond being free: the marginal cost of another image is paid by neither a hosted service nor the user's privacy.
+
+[Read the Local Cutout case study in my portfolio](https://delmellomida.vercel.app/work/local-cutout), [try the app](https://local-cutout.jhondel-tools.workers.dev/), or [view the source on GitHub](https://github.com/DelMellomida/local-cutout).
